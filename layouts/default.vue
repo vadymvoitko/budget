@@ -1,55 +1,98 @@
 <template>
   <div>
-    <nuxt />
+    <aside
+      :class="{
+        root__aside: true,
+        'aside-open': sidebarOpen
+      }"
+    >
+      <!-- <AsideContent/> -->
+    </aside>
+    <nav
+      :class="{
+        root__nav: true,
+        'nav-open': sidebarOpen
+      }"
+    >
+      <button class="nav-button" @click="sidebarOpen = !sidebarOpen">
+        jkshg
+      </button>
+    </nav>
+    <div class="container">
+      <nuxt />
+    </div>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Default',
+  data() {
+    return {
+      sidebarOpen: false
+    }
+  }
+}
+</script>
+
 <style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+.root__aside {
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background-color: #f2f1f1;
+  box-shadow: 3px 4px 7px 1px rgba(161, 115, 115, 0.33);
+  transition: all 0.1s ease-in-out;
+  transform: translateX(-305px);
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
+.root__nav {
+  position: fixed;
+  height: 50px;
+  background-color: #fff;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease-in-out;
+  width: 100%;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+.nav-button {
+  align-items: center;
+  background-color: #87151500;
+  border-color: #87151500;
+  display: inline-flex;
+  height: 100%;
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: center;
+  min-width: 88px;
+  outline: 0;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 10px 30px;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
+  position: relative;
+  vertical-align: middle;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
+.nav-button:hover {
+  background-color: #ebebeb1a;
+  cursor: pointer;
 }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 90%;
+  margin: auto;
 }
 
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.aside-open {
+  transform: translateX(0);
+}
+
+.nav-open {
+  width: calc(100% - 300px);
+  margin-left: 300px;
 }
 </style>
