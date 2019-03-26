@@ -52,11 +52,10 @@ export default {
 <style lang="scss">
 .form {
   position: fixed;
-  left: 25%;
-  top: 25%;
-  max-width: 50%;
+  left: calc(50% - 200px);
+  top: calc(50% - 200px);
   width: 400px;
-  height: 300px;
+  min-height: 350px;
   background-color: #fff;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
