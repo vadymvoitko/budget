@@ -11,19 +11,24 @@
       </nuxt-link>
     </ul>
     <div class="budget__add">
-      <button class="budget__button" @click="$emit('toggleBudgetForm')">
+      <!-- <button class="budget__button" @click="$emit('toggleBudgetForm')">
         + Add budget
-      </button>
+      </button> -->
+      <AButton text="+ Add budget" @click="$emit('toggleBudgetForm')" />
     </div>
   </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import AButton from '~/components/shared/AButton'
 export default {
   name: 'Budget',
   computed: {
     ...mapGetters({ getBudgets: 'getBudgets' })
+  },
+  components: {
+    AButton
   }
 }
 </script>

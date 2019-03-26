@@ -14,9 +14,10 @@
         'nav-open': sidebarOpen
       }"
     >
-      <button class="nav-button" @click="sidebarOpen = !sidebarOpen">
+      <!-- <button class="nav-button" @click="sidebarOpen = !sidebarOpen">
         Budgets
-      </button>
+      </button> -->
+      <AButton flat text="Budget" @click="sidebarOpen = !sidebarOpen" />
     </nav>
     <div class="root__container">
       <nuxt />
@@ -28,11 +29,13 @@
 <script>
 import Budget from '~/components/budget'
 import CreateBudget from '~/components/CreateBudget'
+import AButton from '~/components/shared/AButton'
 export default {
   name: 'Default',
   components: {
     Budget,
-    CreateBudget
+    CreateBudget,
+    AButton
   },
   data() {
     return {
