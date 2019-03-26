@@ -6,7 +6,7 @@
         'aside-open': sidebarOpen
       }"
     >
-      <!-- <AsideContent/> -->
+      <Budget @toggleBudgetForm="toggleBudgetForm" />
     </aside>
     <nav
       :class="{
@@ -15,44 +15,65 @@
       }"
     >
       <button class="nav-button" @click="sidebarOpen = !sidebarOpen">
-        jkshg
+        Budgets
       </button>
     </nav>
-    <div class="container">
+    <div class="root__container">
       <nuxt />
     </div>
+    <CreateBudget v-if="budgetFormOpen" @toggleBudgetForm="toggleBudgetForm" />
   </div>
 </template>
 
 <script>
+import Budget from '~/components/budget'
+import CreateBudget from '~/components/CreateBudget'
 export default {
   name: 'Default',
+  components: {
+    Budget,
+    CreateBudget
+  },
   data() {
     return {
-      sidebarOpen: false
+      sidebarOpen: false,
+      budgetFormOpen: false
+    }
+  },
+  methods: {
+    toggleBudgetForm() {
+      this.budgetFormOpen = !this.budgetFormOpen
     }
   }
 }
 </script>
 
-<style>
-.root__aside {
-  position: fixed;
-  width: 300px;
-  height: 100%;
-  background-color: #f2f1f1;
-  box-shadow: 3px 4px 7px 1px rgba(161, 115, 115, 0.33);
-  transition: all 0.1s ease-in-out;
-  transform: translateX(-305px);
-}
-
-.root__nav {
-  position: fixed;
-  height: 50px;
-  background-color: #fff;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2);
-  transition: all 0.1s ease-in-out;
-  width: 100%;
+<style lang="scss">
+.root {
+  &__aside {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background-color: #f2f1f1;
+    box-shadow: 3px 4px 7px 1px rgba(161, 115, 115, 0.33);
+    transition: all 0.1s ease-in-out;
+    transform: translateX(-305px);
+  }
+  &__nav {
+    position: fixed;
+    height: 50px;
+    background-color: #fff;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s ease-in-out;
+    width: 100%;
+  }
+  &__container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+  }
 }
 
 .nav-button {
@@ -63,28 +84,19 @@ export default {
   height: 100%;
   flex: 0 0 auto;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   justify-content: center;
   min-width: 88px;
   outline: 0;
-  text-transform: uppercase;
   text-decoration: none;
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
   position: relative;
   vertical-align: middle;
-}
 
-.nav-button:hover {
-  background-color: #ebebeb1a;
-  cursor: pointer;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 90%;
-  margin: auto;
+  &:hover {
+    background-color: #ebebeb1a;
+    cursor: pointer;
+  }
 }
 
 .aside-open {

@@ -40,79 +40,6 @@
           >
           <span
             v-else-if="
-              !errorMsg.email &&
-                errorMsg.$invalid &&
-                typeof errorMsg.email !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPFieldEmail') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.nameNotContainsNumbersOrSymbols &&
-                errorMsg.$invalid &&
-                typeof errorMsg.nameNotContainsNumbersOrSymbols !==
-                  'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPFieldName') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.passwordContainsAlpha &&
-                errorMsg.$invalid &&
-                typeof errorMsg.passwordContainsAlpha !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPPasswordOneLetter') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.passwordContainsNumeric &&
-                errorMsg.$invalid &&
-                typeof errorMsg.passwordContainsNumeric !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPPasswordOneNumeric') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.passwordLength &&
-                errorMsg.$invalid &&
-                typeof errorMsg.passwordLength !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPPasswordLength') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.numeric &&
-                errorMsg.$invalid &&
-                typeof errorMsg.numeric !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPFieldNumeric') }}</span
-          >
-          <!-- <span class="help global-error"
-								v-else-if="!errorMsg.skype && errorMsg.$invalid && typeof errorMsg.skype !== 'undefined'  && errorMsg.$dirty">{{ $l('YErrorInvalidSkype') }}</span> -->
-          <span
-            v-else-if="
-              !errorMsg.minLength &&
-                errorMsg.$invalid &&
-                typeof errorMsg.minLength !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPFieldTooShort') }}</span
-          >
-          <span
-            v-else-if="
               !errorMsg.maxLength &&
                 errorMsg.$invalid &&
                 typeof errorMsg.maxLength !== 'undefined' &&
@@ -121,87 +48,6 @@
             class="help global-error"
             >{{ $l('SFNIPFieldTooLong') }}</span
           >
-          <span
-            v-else-if="
-              !errorMsg.isValidAmount &&
-                errorMsg.$invalid &&
-                typeof errorMsg.isValidAmount !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPInvalidAmount') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.checkMaxAmount &&
-                errorMsg.$invalid &&
-                typeof errorMsg.checkMaxAmount !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPInvalidAmount') }}</span
-          >
-          <!-- <span class="help global-error" v-else-if="!errorMsg.isEmail && errorMsg.$invalid && typeof errorMsg.isEmail !== 'undefined' && errorMsg.$dirty">{{ $l('YErrorInvalidEmail') }}</span> -->
-          <!--<span class="help global-error"-->
-          <!--v-else-if="!errorMsg.passwordRequired && errorMsg.$invalid && typeof errorMsg.passwordRequired !== 'undefined' && errorMsg.$dirty">Должен содержать буквы, и хотя бы 1 цифру</span>-->
-          <span
-            v-else-if="
-              !errorMsg.phoneNumberValid &&
-                errorMsg.$invalid &&
-                typeof errorMsg.phoneNumberValid !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPInvalidPhone') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.sameAsPassword &&
-                errorMsg.$invalid &&
-                typeof errorMsg.sameAsPassword !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPPasswordTheSame') }}</span
-          >
-          <span
-            v-else-if="
-              !errorMsg.notSameAsPassword &&
-                errorMsg.$invalid &&
-                typeof errorMsg.notSameAsPassword !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-            >{{ $l('SFNIPPasswordNotTheSame') }}</span
-          >
-          <!-- <span class="help global-error"
-								v-else-if="!errorMsg.notSameAsEmail && errorMsg.$invalid && typeof errorMsg.notSameAsEmail !== 'undefined' && errorMsg.$dirty">Новый e-mail не может быть равен старому</span> -->
-          <!-- <span class="help global-error"
-								v-else-if="!errorMsg.cyrillicName && errorMsg.$invalid && typeof errorMsg.cyrillicName !== 'undefined' && errorMsg.$dirty">Это поле может содержать только кирилицу</span> -->
-          <span
-            v-else-if="
-              !errorMsg.alpha &&
-                errorMsg.$invalid &&
-                typeof errorMsg.alpha !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help is-error global-error"
-            >{{ $l('SFNIPOnlyAlpha') }}</span
-          >
-          <!-- <span class="help is-error global-error"
-								v-else-if="!errorMsg.userAlreadyExists && errorMsg.$invalid && typeof errorMsg.userAlreadyExists !== 'undefined' && errorMsg.$dirty">{{ $l('YErrorUserExists') }}</span> -->
-          <!-- <span class="help is-error global-error"
-								v-else-if="!errorMsg.companyAlreadyExists && errorMsg.$invalid && typeof errorMsg.companyAlreadyExists !== 'undefined' && errorMsg.$dirty">{{ $l('YErrorCompanyExists') }}</span> -->
-          <!-- <span class="help is-error global-error"
-								v-else-if="!errorMsg.url && errorMsg.$invalid && typeof errorMsg.url !== 'undefined' && errorMsg.$dirty">{{ $l('YErrorInvalidUrl') }}</span> -->
-          <!-- <span class="help is-error global-error"
-								v-else-if="!errorMsg.addressIsValid && errorMsg.$invalid && typeof errorMsg.addressIsValid !== 'undefined' && errorMsg.$dirty">{{ $l('YErrorInvalidAddress') }}</span> -->
-          <!--<span class="help global-error"-->
-          <!--v-else-if="!errorMsg.passwordContainsAlpha && errorMsg.$invalid && typeof errorMsg.passwordContainsAlpha !== 'undefined' && errorMsg.$dirty">Пароль должен содержать хотя бы 1 букву</span>-->
-          <!--<span class="help global-error"-->
-          <!--v-else-if="!errorMsg.passwordContainsNumeric && errorMsg.$invalid && typeof errorMsg.passwordContainsNumeric !== 'undefined' && errorMsg.$dirty">Пароль должен содержать хотя бы 1 цифру</span>-->
-          <!--<span class="help global-error"-->
-          <!--v-else-if="!errorMsg.passwordLength && errorMsg.$invalid && typeof errorMsg.passwordLength !== 'undefined' && errorMsg.$dirty">Пароль слишком короткий</span>-->
         </transition>
       </p>
     </div>
@@ -215,56 +61,18 @@ export default {
     value: {
       type: [String, Number]
     },
-    imgUrl: {
-      type: String,
-      default: ''
-    },
-    addon: {
-      value: String
-    },
-    isPassword: {
-      type: Boolean,
-      default: false
-    },
     type: {
       type: String,
       default: 'text'
     },
-    size: {
-      type: String,
-      default: 'normal'
-    },
-    error: {
-      type: Boolean,
-      default: false
-    },
     errorMsg: {
       default: null
-    },
-    name: {
-      type: String,
-      default: 'text'
     },
     placeholder: {
       type: String
     },
-    autocomplete: {
-      type: String,
-      default: 'off'
-    },
-    required: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean
-    },
     maxInputLength: {
       type: Number
-    },
-    theme: {
-      type: String,
-      default: 'default'
     }
   },
   data() {
@@ -317,23 +125,13 @@ export default {
     },
     emitKeyUpEnter(e) {
       this.$emit('keyup', e.target.value)
-    },
-    showValue(e) {
-      if (this.isPassword) {
-        this.initialType = 'text'
-      }
-    },
-    hideValue(e) {
-      if (this.isPassword) {
-        this.initialType = 'password'
-      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import 'assets/scss/settings/_colors.scss';
+/*@import 'assets/scss/settings/_colors.scss';*/
 
 .input-group {
   display: flex;
@@ -355,22 +153,6 @@ export default {
 }
 
 .a-input {
-  /*
-		input:-webkit-autofill,
-		input:-webkit-autofill:hover,
-		input:-webkit-autofill:focus,
-		input:-webkit-autofill,
-		textarea:-webkit-autofill,
-		textarea:-webkit-autofill:hover,
-		textarea:-webkit-autofill:focus,
-		select:-webkit-autofill,
-		select:-webkit-autofill:hover,
-		select:-webkit-autofill:focus {
-			background-color: white !important;
-			color: gray !important;
-		}
-		*/
-
   input::placeholder {
     color: #7c7c82;
     font-weight: 400;
@@ -417,14 +199,13 @@ export default {
   }
 
   .input {
-    color: $c--input-text-color;
     font-weight: 500;
     line-height: 24px;
     background: white;
     border-radius: 5px;
     font-size: 18px;
     padding: 0 8px;
-    width: 100%;
+    width: 90%;
 
     &-normal {
       height: 40px;
@@ -444,16 +225,11 @@ export default {
 
     &:active,
     &:focus {
-      color: $c--input-text-color;
       outline: none;
     }
 
     &.is-error {
-      border-bottom-color: $c--red;
-    }
-
-    &.is-correct {
-      border-bottom: 1px solid $c--input-border;
+      border-bottom-color: red;
     }
 
     &_normal {
@@ -472,7 +248,6 @@ export default {
   }
 
   .label {
-    color: $c--input-text-color;
     font-size: 14px;
     font-weight: 400;
     line-height: 35px;
@@ -483,7 +258,6 @@ export default {
     top: calc(100% + 4px);
     left: 0;
     width: 100%;
-    color: $c--error-msg;
     font-size: 15px;
     line-height: 15px;
     font-weight: 700;
@@ -520,12 +294,9 @@ export default {
       font-size: 16px;
       font-weight: 400;
       padding: 0 22px;
-      // color: $c--input-login-color;
-      // background-color: $c--input-login-bg;
     }
 
     .input::placeholder {
-      color: $c--input-text-color;
       font-size: 14px;
       font-weight: 300;
     }
@@ -537,14 +308,8 @@ export default {
 
   &-theme-grey {
     .input {
-      background: $c--input-background-grey;
       border: 2px solid transparent;
       transition: border-color 0.2s ease-in, color 0.2s ease-in;
-
-      &:hover,
-      &:focus {
-        border: 2px solid $c--input-border;
-      }
     }
   }
 }
