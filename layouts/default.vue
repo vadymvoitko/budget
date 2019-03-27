@@ -71,6 +71,7 @@ export default {
     width: 100%;
   }
   &__container {
+    padding-top: 50px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -109,5 +110,9 @@ export default {
 .nav-open {
   width: calc(100% - 300px);
   margin-left: 300px;
+}
+
+body {
+  margin: 0 !important;
 }
 </style>

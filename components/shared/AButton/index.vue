@@ -46,7 +46,7 @@ export default {
   box-shadow: 1px 1px 3px 1px #8080803b;
 
   &:hover {
-    background-color: #ebebeb8c;
+    background-color: #ebebeb8c !important;
     cursor: pointer;
   }
 }
@@ -56,5 +56,6 @@ export default {
   border: none;
   border-radius: 0 !important;
   box-shadow: unset !important;
+  background: inherit;
 }
 </style>

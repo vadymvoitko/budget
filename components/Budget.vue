@@ -11,9 +11,6 @@
       </nuxt-link>
     </ul>
     <div class="budget__add">
-      <!-- <button class="budget__button" @click="$emit('toggleBudgetForm')">
-        + Add budget
-      </button> -->
       <AButton text="+ Add budget" @click="$emit('toggleBudgetForm')" />
     </div>
   </section>
