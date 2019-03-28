@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as types from '~/store/mutation-types'
-// import node_uid from 'node-uid'
+import Vue from 'vue'
+import uid from 'uid'
 
 export const state = () => ({
   budgets: {
@@ -61,18 +62,28 @@ export const getters = {
 }
 
 export const actions = {
-  async sendContactData ({commit}, userData) {
-    try {
-      const res = await this.$axios.post(api.publicApi.contactUs(), userData)
-    } catch (err) {
-      throw err
-    }
-  },
+  addBudget({state:{ budgets }, commit }, {name, currency, sum }) {
+    let id;
+    do { id = uid() } while (id in budgets)
+    commit(types.ADD_BUDGET, {
+      id,
+      name,
+      currency,
+      sum,
+      remBudget: sum,
+      minTransaction: sum,
+      maxTransaction: sum,
+      averageTransaction: 1000,
+      transactions: {}
+    })
+  }
 }
 
 export const mutations = {
-  [types.SET_MAIN_SPINNER] (state, payload) {
-    localStorage.setItem('amount', payload.amount)
-    localStorage.setItem('currency', payload.currency)
+  [types.ADD_BUDGET]({budgets}, payload ) {
+    Vue.set(budgets, payload.id, {
+      ...payload
+    })
+    localStorage.setItem('sum', payload.sum)
   },
 }

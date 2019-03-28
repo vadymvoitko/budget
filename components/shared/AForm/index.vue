@@ -15,6 +15,15 @@
             :type="item.type"
             :placeholder="item.placeholder"
             :value="item.value"
+            @input="enterInput(item, $event)"
+          />
+        </div>
+        <div class="form__actions">
+          <AButton
+            v-for="(item, index) in buttons"
+            :key="index"
+            :text="item.text"
+            @click="$emit(item.action, formData)"
           />
         </div>
       </div>
@@ -24,10 +33,12 @@
 
 <script>
 import AInput from './../AInput'
+import AButton from './../AButton'
 export default {
   name: 'AForm',
   components: {
-    AInput
+    AInput,
+    AButton
   },
   props: {
     header: {
@@ -38,14 +49,23 @@ export default {
     inputs: {
       required: true,
       type: Array
+    },
+    buttons: {
+      required: true,
+      type: Array
     }
   },
   data() {
     return {
-      formOpen: false
+      formOpen: false,
+      formData: {}
     }
   },
-  computed: {}
+  methods: {
+    enterInput(item, value) {
+      this.formData[item.field] = value
+    }
+  }
 }
 </script>
 
@@ -100,6 +120,13 @@ export default {
       text-transform: capitalize;
       padding-left: 20px;
     }
+  }
+
+  &__actions {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    justify-content: space-around;
   }
 }
 </style>
