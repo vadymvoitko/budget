@@ -1,33 +1,24 @@
 <template>
-  <div class="a-input" :class="wrapperClasses">
-    <slot name="label"></slot>
+  <div class="a-input">
     <div class="input-group">
-      <div v-show="addon" class="addon">
-        <span>{{ addon }}</span>
-      </div>
       <p class="control has-icon has-icon-right">
-        <input
-          class="main-input"
-          :name="name"
-          :class="classes"
-          :placeholder="placeholder"
-          :autocomplete="autocomplete ? autocomplete : null"
-          :required="required"
-          :value="value"
-          :type="type"
-          :disabled="disabled"
-          :maxlength="maxInputLength"
-          @blur="onBlur"
-          @change="onChange"
-          @focus="onFocus"
-          @input="updateValue"
-          @keyup.enter="emitKeyUpEnter"
-        />
-        <transition
-          v-if="errorMsg && errorMsg.$invalid"
-          name="fade-input-tips"
-          mode="in-out"
-        >
+        <label>
+          <input
+            class="main-input"
+            placeholder=" "
+            :value="value"
+            :type="type"
+            :maxlength="maxInputLength"
+            @blur="onBlur"
+            @change="onChange"
+            @focus="onFocus"
+            @input="updateValue"
+            @keyup.enter="emitKeyUpEnter"
+          />
+          <span>{{ placeholder }}</span>
+        </label>
+        <!-- eslint-disable -->
+        <transition v-if="errorMsg && errorMsg.$invalid" name="fade-input-tips" mode="in-out">
           <span
             v-if="
               !errorMsg.required &&
@@ -36,8 +27,7 @@
                 errorMsg.$dirty
             "
             class="help global-error"
-            >{{ $l('SFNIPFieldIsRequired') }}</span
-          >
+          >required</span>
           <span
             v-else-if="
               !errorMsg.maxLength &&
@@ -46,8 +36,7 @@
                 errorMsg.$dirty
             "
             class="help global-error"
-            >{{ $l('SFNIPFieldTooLong') }}</span
-          >
+          >too long</span>
         </transition>
       </p>
     </div>
@@ -83,31 +72,6 @@ export default {
       initialType: this.type
     }
   },
-  computed: {
-    classes() {
-      const classes = [
-        `input-${this.size}`,
-        'input',
-        { 'is-disabled': this.disabled },
-        { 'input-has-addon': this.addon }
-      ]
-      const isErrorMsg =
-        typeof this.errorMsg === 'object' &&
-        this.errorMsg !== null &&
-        Object.keys(this.errorMsg).length !== 0
-      if (isErrorMsg) {
-        const errorClasses = [
-          { 'is-error': this.errorMsg.$invalid && this.errorMsg.$dirty },
-          { 'is-correct': this.errorMsg.$dirty && !this.errorMsg.$invalid }
-        ]
-        classes.concat(errorClasses)
-      }
-      return classes
-    },
-    wrapperClasses() {
-      return [`a-input-theme-${this.theme}`]
-    }
-  },
   methods: {
     updateValue(e) {
       this.$emit('input', e.target.value)
@@ -131,25 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/*@import 'assets/scss/settings/_colors.scss';*/
-
 .input-group {
   display: flex;
   width: 100%;
-
-  .addon {
-    height: 40px;
-    padding: 0 15px;
-    background: #d2d1d1;
-    border: 1px solid #ccc;
-    border-right: none;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-
-    span {
-      line-height: 2.5;
-    }
-  }
 }
 
 .a-input {
@@ -174,143 +122,58 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
-    margin: 0 0 25px;
+    margin: 0 10px 25px;
     padding: 0;
-    width: 100%;
-
-    .show-pass {
-      position: absolute;
-      right: 10px;
-      line-height: 45px;
-      -moz-user-select: none;
-      -khtml-user-select: none;
-      user-select: none;
-
-      img {
-        max-width: 25px;
-        cursor: pointer;
-      }
-    }
+    border-bottom: 1px solid grey;
+    width: 185px;
+    transform: translateY(5px);
 
     input::placeholder {
       color: #7c7c82;
-      // text-transform: uppercase;
     }
   }
+}
 
-  .input {
-    font-weight: 500;
-    line-height: 24px;
-    background: white;
-    border-radius: 5px;
-    font-size: 18px;
-    padding: 0 8px;
-    width: 90%;
-
-    &-normal {
-      height: 40px;
-    }
-
-    &-small {
-      height: 36px;
-    }
-
-    &-verify {
-      height: 38px;
-    }
-
-    &-small {
-      height: 20px;
-    }
-
-    &:active,
-    &:focus {
-      outline: none;
-    }
-
-    &.is-error {
-      border-bottom-color: red;
-    }
-
-    &_normal {
-      height: 40px;
-    }
-
-    &.is-disabled {
-      border: 1px solid white;
-      pointer-events: none;
-    }
-
-    &-has-addon {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+.main-input {
+  border: 0;
+  &:focus {
+    outline: none;
+    &::placeholder {
+      transform: translateY('-20px');
     }
   }
+}
 
-  .label {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 35px;
-  }
+label {
+  position: relative;
+  display: inline-block;
+}
 
-  .help {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    width: 100%;
-    font-size: 15px;
-    line-height: 15px;
-    font-weight: 700;
-  }
+span {
+  padding: 10px;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: 0.2s;
+  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  opacity: 0.5;
+}
 
-  &-theme-boxed {
-    box-shadow: 0 2px 8px 2px #e7e7e9;
+input {
+  padding: 10px;
+}
 
-    .input {
-      height: 47px;
-      padding: 0 8px;
-      font-size: 16px;
-      line-height: 52px;
-      font-weight: 400;
-    }
+input:focus + span,
+input:not(:placeholder-shown) + span {
+  opacity: 1;
+  transform: scale(0.75) translateY(-100%) translateX(-30px);
+}
 
-    .input::placeholder {
-      font-size: 12px;
-      font-weight: 300;
-    }
-
-    .control {
-      margin: 0 0 10px;
-    }
-  }
-
-  &-theme-boxed-grey {
-    height: 52px;
-    box-shadow: 0 2px 8px 2px #e7e7e9;
-
-    .input {
-      height: 52px;
-      margin-bottom: 25px;
-      font-size: 16px;
-      font-weight: 400;
-      padding: 0 22px;
-    }
-
-    .input::placeholder {
-      font-size: 14px;
-      font-weight: 300;
-    }
-
-    .control {
-      margin: 0 0 10px;
-    }
-  }
-
-  &-theme-grey {
-    .input {
-      border: 2px solid transparent;
-      transition: border-color 0.2s ease-in, color 0.2s ease-in;
-    }
-  }
+input:focus + span,
+input:not(:-ms-input-placeholder) + span {
+  opacity: 1;
+  transform: scale(0.75) translateY(-100%) translateX(-30px);
 }
 </style>

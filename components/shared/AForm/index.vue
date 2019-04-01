@@ -118,6 +118,7 @@ export default {
       flex: 1 1 auto;
       width: 100%;
       justify-content: space-between;
+      align-items: center;
     }
 
     &__input-label {
