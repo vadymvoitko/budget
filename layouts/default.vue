@@ -6,6 +6,7 @@
         'aside-open': sidebarOpen
       }"
     >
+      <h1>Budgets</h1>
       <Budget @toggleBudgetForm="toggleBudgetForm" />
     </aside>
     <nav
@@ -14,10 +15,11 @@
         'nav-open': sidebarOpen
       }"
     >
-      <!-- <button class="nav-button" @click="sidebarOpen = !sidebarOpen">
-        Budgets
-      </button> -->
-      <AButton flat text="Budget" @click="sidebarOpen = !sidebarOpen" />
+      <AButton
+        flat
+        :text="sidebarOpen ? 'Hide Budgets' : 'Show Budgets'"
+        @click="sidebarOpen = !sidebarOpen"
+      />
     </nav>
     <div class="root__container">
       <nuxt />
@@ -61,6 +63,7 @@ export default {
 .root {
   &__aside {
     position: fixed;
+    text-align: center;
     width: 300px;
     height: 100%;
     background-color: #f2f1f1;

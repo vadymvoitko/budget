@@ -56,7 +56,7 @@ export const getters = {
 export const actions = {
   addBudget({state:{ budgets }, commit }, {name, currency, sum }) {
     let id;
-    do { id = uid() } while (id in budgets)
+    do { id = uid(10) } while (id in budgets)
     commit(types.ADD_BUDGET, {
       id,
       name,
@@ -68,17 +68,14 @@ export const actions = {
       averageTransaction: 0
     })
   },
-  addTransaction({ state: { transactions, budgets }, commit, dispatch }, {budgetId, target, sum, currency}) {
-    try {
-      let id;
-      do {
-        id = uid()
-      } while (transactions[budgetId] && id in transactions[budgetId])
-      const currencyRate = state.currencyPairs[budgets[budgetId].currency][currency];
-      const sumInBudgetCurrency = sum * currencyRate;
-    } catch (err) {
-      console.log(err)
-    }
+  addTransaction({ state: { transactions, budgets, currencyPairs }, commit, dispatch }, {budgetId, target, sum, currency}) {
+    let id;
+    do {
+      id = uid(10)
+    } while (transactions[budgetId] && id in transactions[budgetId])
+    const currencyRate = currencyPairs[budgets[budgetId].currency][currency];
+    const sumInBudgetCurrency = sum * currencyRate;
+
     commit(types.ADD_TRANSACTION, {
       id,
       target,
@@ -97,9 +94,12 @@ export const actions = {
     const newSum = state.budgets[budgetId].remBudget - sumInBudgetCurrency
     commit(types.UPDATE_BUDGET, { budgetId, newSum })
   },
-  deleteTransaction({commit, state}, payload){
-    // I have ot consider previous currency rate
-    const newSum = state.budgets[payload.budgetId].remBudget + state.transactions[payload.budgetId][payload.transactionId].sumInBudgetCurrency
+  deleteTransaction({commit, state: {budgets, transactions}}, payload){
+    if (!(transactions[payload.budgetId] && transactions[payload.budgetId][payload.transactionId] && budgets[payload.budgetId])) {
+      commit(types.SHOW_ERROR, 'Cannot delete item');
+      return;
+    }
+    const newSum = budgets[payload.budgetId].remBudget + transactions[payload.budgetId][payload.transactionId].sumInBudgetCurrency
     commit(types.UPDATE_BUDGET, {
       budgetId: payload.budgetId,
       newSum: newSum
@@ -110,7 +110,7 @@ export const actions = {
     await getters.getAvailableCurrencies.forEach(async base => {
       try {
         const response = await axios.get(state.currencyExchangeURL, {params: {base}} );
-        const rates = response && response.data && response.data.rates
+        const rates = response.data && response.data.rates
         commit(types.SET_CURRENCY_PAIRS, {base, rates})
       } catch (err) {
         console.log(err)
@@ -145,5 +145,8 @@ export const mutations = {
   },
   [types.DELETE_TRANSACTION]({ transactions }, { budgetId, transactionId }) {
     delete transactions[budgetId][transactionId]
+  },
+  [types.SHOW_ERROR](state, payload) {
+    console.error(payload)
   }
 }

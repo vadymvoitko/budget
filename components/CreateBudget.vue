@@ -4,6 +4,7 @@
       header="Create budget"
       :inputs="inputs"
       :buttons="buttons"
+      closeAction="toggleBudgetForm"
       @toggleBudgetForm="$emit('toggleBudgetForm')"
       @createBudget="createBudget"
     />

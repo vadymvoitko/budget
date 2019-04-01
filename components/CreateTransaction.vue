@@ -4,6 +4,7 @@
       header="Create transaction"
       :inputs="inputs"
       :buttons="buttons"
+      closeAction="toggleTransactionForm"
       @toggleTransactionForm="$emit('toggleTransactionForm')"
       @createTransaction="createTransaction"
     />

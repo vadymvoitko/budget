@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="form__overlay" @click="$emit('toggleBudgetForm')" />
+    <div class="form__overlay" @click="$emit(closeAction)" />
     <div class="form">
-      <div class="form__close" @click="$emit('toggleBudgetForm')">x</div>
+      <div class="form__close" @click="$emit(closeAction)">x</div>
       <div class="form__content">
         <h1>{{ header }}</h1>
         <div
@@ -53,6 +53,10 @@ export default {
     buttons: {
       required: true,
       type: Array
+    },
+    closeAction: {
+      required: true,
+      type: String
     }
   },
   data() {

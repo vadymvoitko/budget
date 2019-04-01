@@ -43,7 +43,7 @@ export default {
 
   &__list {
     width: 100%;
-    padding: 37px 0 18px;
+    padding: 0 0 18px;
   }
 
   &__list-item {
