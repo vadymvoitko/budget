@@ -2,8 +2,11 @@
 import * as types from '~/store/mutation-types'
 import Vue from 'vue'
 import uid from 'uid'
+import axios from 'axios'
 
 export const state = () => ({
+  currencyPairs: {},
+  currencyExchangeURL: 'https://api.exchangeratesapi.io/latest',
   budgets: {
     'aaa': {
       id: 'aaa',
@@ -13,21 +16,7 @@ export const state = () => ({
       remBudget: 1000,
       minTransaction: 1000,
       maxTransaction: 1000,
-      averageTransaction: 1000,
-      transactions: {
-        'bbb': {
-          id: 'bbb',
-          purpose: 'Items',
-          sum: 300,
-          currency: 'USD'
-        },
-        'ccc': {
-          id: 'ccc',
-          purpose: 'Items',
-          sum: 300,
-          currency: 'USD'
-        }
-      }
+      averageTransaction: 1000
     },
     'ddd': {
       id: 'ddd',
@@ -37,28 +26,31 @@ export const state = () => ({
       remBudget: 1000,
       minTransaction: 1000,
       maxTransaction: 1000,
-      averageTransaction: 1000,
-      transactions: {
-        'bbb1': {
-          purpose: 'Items',
-          sum: 300,
-          currency: 'USD'
-        },
-        'ccc1': {
-          purpose: 'Items',
-          sum: 300,
-          currency: 'USD'
-        }
-      }
+      averageTransaction: 1000
     }
   },
-  currency_rate: 'https://api.exchangeratesapi.io/latest?base=USD'
+  transactions: {
+    'aaa': {
+      'bbb1': {
+        target: 'Items',
+        sum: 300,
+        currency: 'USD'
+      },
+      'ccc1': {
+        target: 'Items',
+        sum: 300,
+        currency: 'USD'
+      }
+    }
+  }
 })
 
 export const getters = {
-  getBudgets: state => state.budgets,
-  getTransactionsByBudgetId: state => id => state.budgets[id].transactions,
-  getBudgetById: state => id => state.budgets[id]
+  getBudgets: ({budgets}) => budgets,
+  getTransactionsByBudgetId: ({ transactions }) => id => transactions[id],
+  getBudgetById: ({budgets}) => id => budgets[id],
+  getAvailableCurrencies: () => process.env.currency,
+  getCurrencyPairs: ({currencyPairs}) => currencyPairs
 }
 
 export const actions = {
@@ -71,12 +63,63 @@ export const actions = {
       currency,
       sum,
       remBudget: sum,
-      minTransaction: sum,
-      maxTransaction: sum,
-      averageTransaction: 1000,
-      transactions: {}
+      minTransaction: 0,
+      maxTransaction: 0,
+      averageTransaction: 0
     })
-  }
+  },
+  addTransaction({ state: { transactions, budgets }, commit, dispatch }, {budgetId, target, sum, currency}) {
+    try {
+      let id;
+      do {
+        id = uid()
+      } while (transactions[budgetId] && id in transactions[budgetId])
+      const currencyRate = state.currencyPairs[budgets[budgetId].currency][currency];
+      const sumInBudgetCurrency = sum * currencyRate;
+    } catch (err) {
+      console.log(err)
+    }
+    commit(types.ADD_TRANSACTION, {
+      id,
+      target,
+      currency,
+      sum,
+      budgetId,
+      sumInBudgetCurrency
+    })
+    dispatch('calculateBudget', {
+      budgetId,
+      sum,
+      sumInBudgetCurrency
+    })
+  },
+  calculateBudget({ state, commit }, { budgetId, sumInBudgetCurrency}) {
+    const newSum = state.budgets[budgetId].remBudget - sumInBudgetCurrency
+    commit(types.UPDATE_BUDGET, { budgetId, newSum })
+  },
+  deleteTransaction({commit, state}, payload){
+    // I have ot consider previous currency rate
+    const newSum = state.budgets[payload.budgetId].remBudget + state.transactions[payload.budgetId][payload.transactionId].sumInBudgetCurrency
+    commit(types.UPDATE_BUDGET, {
+      budgetId: payload.budgetId,
+      newSum: newSum
+    })
+    commit(types.DELETE_TRANSACTION, payload)
+  },
+  async generateCurrencyPairs({state, getters, commit, dispatch}) {
+    await getters.getAvailableCurrencies.forEach(async base => {
+      try {
+        const response = await axios.get(state.currencyExchangeURL, {params: {base}} );
+        const rates = response && response.data && response.data.rates
+        commit(types.SET_CURRENCY_PAIRS, {base, rates})
+      } catch (err) {
+        console.log(err)
+      }
+    });
+    setTimeout(() => {
+      dispatch('generateCurrencyPairs')
+    }, 108000);
+  },
 }
 
 export const mutations = {
@@ -86,4 +129,21 @@ export const mutations = {
     })
     localStorage.setItem('sum', payload.sum)
   },
+  [types.SET_CURRENCY_PAIRS](state, {base, rates} ) {
+    Vue.set(state.currencyPairs, base, {
+      ...rates
+    })
+  },
+  [types.ADD_TRANSACTION]({transactions}, payload) {
+    if (!transactions[payload.budgetId]) transactions[payload.budgetId] = {}
+    Vue.set(transactions[payload.budgetId], payload.id, {
+      ...payload
+    })
+  },
+  [types.UPDATE_BUDGET]({ budgets }, { budgetId, newSum }) {
+    budgets[budgetId].remBudget = newSum
+  },
+  [types.DELETE_TRANSACTION]({ transactions }, { budgetId, transactionId }) {
+    delete transactions[budgetId][transactionId]
+  }
 }

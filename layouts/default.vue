@@ -30,6 +30,7 @@
 import Budget from '~/components/budget'
 import CreateBudget from '~/components/CreateBudget'
 import AButton from '~/components/shared/AButton'
+import { mapActions } from 'vuex'
 export default {
   name: 'Default',
   components: {
@@ -40,13 +41,18 @@ export default {
   data() {
     return {
       sidebarOpen: false,
-      budgetFormOpen: false
+      budgetFormOpen: false,
+      transactionFormOpen: false
     }
   },
   methods: {
+    ...mapActions(['generateCurrencyPairs', 'fetchCurrencyPairs']),
     toggleBudgetForm() {
       this.budgetFormOpen = !this.budgetFormOpen
     }
+  },
+  created() {
+    this.generateCurrencyPairs()
   }
 }
 </script>

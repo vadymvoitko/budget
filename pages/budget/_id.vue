@@ -24,7 +24,7 @@
       >
         <div class="budget__transactions-list__text">
           <div class="budget__transactions-cell">
-            {{ value.purpose }}
+            {{ value.target }}
           </div>
           <div class="budget__transactions-cell">
             {{ value.sum }}
@@ -34,22 +34,43 @@
           </div>
         </div>
         <div class="budget__transactions-cell right">
-          <AButton flat text="delete" />
+          <AButton
+            flat
+            text="delete"
+            @click="
+              deleteTransaction({
+                budgetId: $route.params.id,
+                transactionId: value.id
+              })
+            "
+          />
         </div>
       </div>
     </div>
     <div class="budget__transactions">
-      <AButton text="+ New transaction" />
+      <AButton text="+ New transaction" @click="toggleTransactionForm" />
     </div>
+    <CreateTransaction
+      v-if="transactionFormOpen"
+      @toggleTransactionForm="toggleTransactionForm"
+    />
   </section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AButton from '~/components/shared/AButton'
+import CreateTransaction from '~/components/CreateTransaction'
+
 export default {
   components: {
-    AButton
+    AButton,
+    CreateTransaction
+  },
+  data() {
+    return {
+      transactionFormOpen: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -60,6 +81,12 @@ export default {
       const budget = { ...this.getBudgetById(this.$route.params.id) }
       delete budget.transactions
       return budget
+    }
+  },
+  methods: {
+    ...mapActions(['deleteTransaction']),
+    toggleTransactionForm() {
+      this.transactionFormOpen = !this.transactionFormOpen
     }
   }
 }
