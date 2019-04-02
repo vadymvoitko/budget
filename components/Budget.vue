@@ -1,5 +1,6 @@
 <template>
   <section class="budget__container">
+    <h1 class="budget__header">Budgets</h1>
     <ul class="budget__list">
       <nuxt-link
         v-for="value in getBudgets"
@@ -39,6 +40,16 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    text-align: center;
+  }
+
+  &__header {
+    width: 100%;
+    padding: 11px 0;
+    font-size: 25px;
+    box-shadow: 1px 1px 8px 0px #cbc9c9;
+    transform: translateX(-1px);
+    margin: 0;
   }
 
   &__list {
@@ -48,7 +59,7 @@ export default {
 
   &__list-item {
     padding-left: 37px;
-    height: 40px;
+    height: 50px;
     display: flex;
     font-size: 30px;
     font-weight: bold;
@@ -59,6 +70,11 @@ export default {
     &:hover {
       cursor: pointer;
       background-color: #ebebeb;
+    }
+
+    &:before {
+      content: '•';
+      padding: 0 20px 3px 0;
     }
   }
 
@@ -83,6 +99,9 @@ export default {
 
   &__add {
     margin: 0 auto;
+    padding: 10px 0;
+    box-shadow: -1px 0px 3px #dad5d5;
+    width: 100%;
   }
 }
 </style>

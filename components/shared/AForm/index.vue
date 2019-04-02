@@ -15,6 +15,7 @@
             :type="item.type"
             :placeholder="item.placeholder"
             :value="item.value"
+            :options="item.options"
             @input="enterInput(item, $event)"
           />
         </div>
@@ -23,6 +24,7 @@
             v-for="(item, index) in buttons"
             :key="index"
             :text="item.text"
+            :styles="{ margin: '10px' }"
             @click="$emit(item.action, formData)"
           />
         </div>
@@ -85,6 +87,8 @@ export default {
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   text-decoration: none;
   z-index: 1000;
+  border-radius: 3px;
+  border: 7px solid #b1b1b1;
 
   &__overlay {
     position: fixed;
@@ -97,11 +101,18 @@ export default {
 
   &__close {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 7px;
+    top: 6px;
+    padding: 5px;
+    width: 18px;
+    border: 1px solid #d2cccc4f;
+    box-shadow: 1px 1px 4px #8080808c;
+    border-radius: 50%;
+    text-align: center;
 
     &:hover {
       cursor: pointer;
+      background: #ebebeb;
     }
   }
 
@@ -116,6 +127,7 @@ export default {
     &__input-pair {
       display: flex;
       flex: 1 1 auto;
+      padding: 10px 0;
       width: 100%;
       justify-content: space-between;
       align-items: center;
@@ -130,8 +142,9 @@ export default {
   &__actions {
     display: flex;
     flex: 1 1 auto;
+    padding: 30px 0;
     width: 100%;
-    justify-content: space-around;
+    justify-content: flex-end;
   }
 }
 </style>

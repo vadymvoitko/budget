@@ -1,7 +1,10 @@
 <template>
   <div class="a-input">
     <div class="input-group">
-      <p class="control has-icon has-icon-right">
+      <p
+        v-if="type === 'text' || type === 'number'"
+        class="control has-icon has-icon-right"
+      >
         <label>
           <input
             class="main-input"
@@ -39,6 +42,24 @@
           >too long</span>
         </transition>
       </p>
+      <div v-if="type === 'select'" class="selectable">
+        <select name="select" @input="updateValue">
+          <option
+            disabled
+            selected
+            value
+          >
+            -- select {{ placeholder }} --
+          </option>
+          <option
+            v-for="(elem, index) in options"
+            :key="index"
+            :value="elem"
+          >
+            {{ elem }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -62,6 +83,9 @@ export default {
     },
     maxInputLength: {
       type: Number
+    },
+    options: {
+      type: Array
     }
   },
   data() {
@@ -134,6 +158,11 @@ export default {
   }
 }
 
+.selectable {
+  border-bottom: 1px solid #abaaaa;
+  margin-right: 10px;
+}
+
 .main-input {
   border: 0;
   &:focus {
@@ -141,6 +170,16 @@ export default {
     &::placeholder {
       transform: translateY('-20px');
     }
+  }
+}
+
+select[name='select'] {
+  width: 185px;
+  border: 0;
+  outline: none;
+
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -168,12 +207,12 @@ input {
 input:focus + span,
 input:not(:placeholder-shown) + span {
   opacity: 1;
-  transform: scale(0.75) translateY(-100%) translateX(-30px);
+  transform: scale(0.65) translateY(-50%) translateX(-30px);
 }
 
 input:focus + span,
 input:not(:-ms-input-placeholder) + span {
   opacity: 1;
-  transform: scale(0.75) translateY(-100%) translateX(-30px);
+  transform: scale(0.65) translateY(-50%) translateX(-30px);
 }
 </style>

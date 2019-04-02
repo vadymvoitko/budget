@@ -99,7 +99,6 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
 }
@@ -135,7 +134,7 @@ export default {
   }
 
   &__transactions {
-    padding: 15px;
+    padding: 25px;
     height: 30px;
     width: 100%;
     font-weight: bold;

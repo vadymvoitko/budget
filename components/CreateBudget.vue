@@ -4,7 +4,7 @@
       header="Create budget"
       :inputs="inputs"
       :buttons="buttons"
-      closeAction="toggleBudgetForm"
+      close-action="toggleBudgetForm"
       @toggleBudgetForm="$emit('toggleBudgetForm')"
       @createBudget="createBudget"
     />
@@ -13,7 +13,7 @@
 
 <script>
 import AForm from '~/components/shared/AForm'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'CreateBudget',
   components: {
@@ -22,26 +22,6 @@ export default {
   props: {},
   data() {
     return {
-      inputs: [
-        {
-          type: 'text',
-          field: 'name',
-          placeholder: 'name',
-          value: ''
-        },
-        {
-          type: 'text',
-          field: 'currency',
-          placeholder: 'currency',
-          value: ''
-        },
-        {
-          type: 'text',
-          field: 'sum',
-          placeholder: 'sum',
-          value: ''
-        }
-      ],
       buttons: [
         {
           text: 'Create',
@@ -50,6 +30,34 @@ export default {
         {
           text: 'Cancel',
           action: 'toggleBudgetForm'
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getAvailableCurrencies: 'getAvailableCurrencies'
+    }),
+    inputs() {
+      return [
+        {
+          type: 'text',
+          field: 'name',
+          placeholder: 'name',
+          value: ''
+        },
+        {
+          type: 'select',
+          field: 'currency',
+          placeholder: 'currency',
+          options: this.getAvailableCurrencies,
+          value: ''
+        },
+        {
+          type: 'number',
+          field: 'sum',
+          placeholder: 'sum',
+          value: ''
         }
       ]
     }

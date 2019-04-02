@@ -6,7 +6,6 @@
         'aside-open': sidebarOpen
       }"
     >
-      <h1>Budgets</h1>
       <Budget @toggleBudgetForm="toggleBudgetForm" />
     </aside>
     <nav
@@ -21,7 +20,7 @@
         @click="sidebarOpen = !sidebarOpen"
       />
     </nav>
-    <div class="root__container">
+    <div class="root__container" @click.stop="sidebarOpen = false">
       <nuxt />
     </div>
     <CreateBudget v-if="budgetFormOpen" @toggleBudgetForm="toggleBudgetForm" />
@@ -48,13 +47,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['generateCurrencyPairs', 'fetchCurrencyPairs']),
+    ...mapActions([
+      'generateCurrencyPairs',
+      'fetchCurrencyPairs',
+      'deriveDataFromStorage'
+    ]),
     toggleBudgetForm() {
       this.budgetFormOpen = !this.budgetFormOpen
     }
   },
   created() {
     this.generateCurrencyPairs()
+  },
+  mounted() {
+    this.deriveDataFromStorage()
   }
 }
 </script>
@@ -66,7 +72,7 @@ export default {
     text-align: center;
     width: 300px;
     height: 100%;
-    background-color: #f2f1f1;
+    background-color: #fffefe;
     box-shadow: 3px 4px 7px 1px rgba(161, 115, 115, 0.33);
     transition: all 0.1s ease-in-out;
     transform: translateX(-305px);
@@ -75,12 +81,12 @@ export default {
     position: fixed;
     height: 50px;
     background-color: #fff;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 7px -1px rgba(0, 0, 0, 0.2);
     transition: all 0.1s ease-in-out;
     width: 100%;
   }
   &__container {
-    padding-top: 50px;
+    padding-top: 60px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -123,5 +129,6 @@ export default {
 
 body {
   margin: 0 !important;
+  font: 400 13.33px Arial;
 }
 </style>
