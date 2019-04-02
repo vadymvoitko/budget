@@ -18,7 +18,7 @@
             @input="updateValue"
             @keyup.enter="emitKeyUpEnter"
           />
-          <span>{{ placeholder }}</span>
+          <span class="main-input__placeholder">{{ placeholder }}</span>
         </label>
         <!-- eslint-disable -->
         <transition v-if="errorMsg && errorMsg.$invalid" name="fade-input-tips" mode="in-out">
@@ -165,12 +165,33 @@ export default {
 
 .main-input {
   border: 0;
+
+  &__placeholder {
+    padding: 10px;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity: 0.5;
+  }
+
   &:focus {
     outline: none;
     &::placeholder {
       transform: translateY('-20px');
     }
   }
+}
+
+.global-error {
+  transition: 1s ease-in-out;
+  position: absolute;
+  top: 38px;
+  left: 5px;
+  color: red;
 }
 
 select[name='select'] {
@@ -186,18 +207,6 @@ select[name='select'] {
 label {
   position: relative;
   display: inline-block;
-}
-
-span {
-  padding: 10px;
-  pointer-events: none;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: 0.2s;
-  transition-timing-function: ease;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  opacity: 0.5;
 }
 
 input {

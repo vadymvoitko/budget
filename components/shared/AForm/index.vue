@@ -16,6 +16,7 @@
             :placeholder="item.placeholder"
             :value="item.value"
             :options="item.options"
+            :errorMsg="errorMsg[item.field]"
             @input="enterInput(item, $event)"
           />
         </div>
@@ -59,6 +60,9 @@ export default {
     closeAction: {
       required: true,
       type: String
+    },
+    errorMsg: {
+      required: true
     }
   },
   data() {
@@ -70,6 +74,7 @@ export default {
   methods: {
     enterInput(item, value) {
       this.formData[item.field] = value
+      this.$emit('inputValue', item.field, value)
     }
   }
 }
