@@ -6,7 +6,7 @@
         'aside-open': sidebarOpen
       }"
     >
-      <Budget @toggleBudgetForm="toggleBudgetForm" />
+      <Budget />
     </aside>
     <nav
       :class="{
@@ -23,26 +23,22 @@
     <div class="root__container" @click.stop="sidebarOpen = false">
       <nuxt />
     </div>
-    <CreateBudget v-if="budgetFormOpen" @toggleBudgetForm="toggleBudgetForm" />
   </div>
 </template>
 
 <script>
 import Budget from '~/components/budget'
-import CreateBudget from '~/components/CreateBudget'
 import AButton from '~/components/shared/AButton'
 import { mapActions } from 'vuex'
 export default {
   name: 'Default',
   components: {
     Budget,
-    CreateBudget,
     AButton
   },
   data() {
     return {
       sidebarOpen: false,
-      budgetFormOpen: false,
       transactionFormOpen: false
     }
   },
@@ -51,10 +47,7 @@ export default {
       'generateCurrencyPairs',
       'fetchCurrencyPairs',
       'deriveDataFromStorage'
-    ]),
-    toggleBudgetForm() {
-      this.budgetFormOpen = !this.budgetFormOpen
-    }
+    ])
   },
   created() {
     this.generateCurrencyPairs()

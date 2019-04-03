@@ -11,36 +11,17 @@
             placeholder=" "
             :value="value"
             :type="type"
-            :maxlength="maxInputLength"
-            @blur="onBlur"
-            @change="onChange"
-            @focus="onFocus"
             @input="updateValue"
-            @keyup.enter="emitKeyUpEnter"
+            @blur="touchValue"
           />
           <span class="main-input__placeholder">{{ placeholder }}</span>
         </label>
         <!-- eslint-disable -->
-        <transition v-if="errorMsg && errorMsg.$invalid" name="fade-input-tips" mode="in-out">
-          <span
-            v-if="
-              !errorMsg.required &&
-                errorMsg.$invalid &&
-                typeof errorMsg.required !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-          >required</span>
-          <span
-            v-else-if="
-              !errorMsg.maxLength &&
-                errorMsg.$invalid &&
-                typeof errorMsg.maxLength !== 'undefined' &&
-                errorMsg.$dirty
-            "
-            class="help global-error"
-          >too long</span>
-        </transition>
+        <AErrorMessage
+          :errorMsg="errorMsg"
+          :maxInputLength="maxInputLength"
+          :exceedBudget="exceedBudget"
+        />
       </p>
       <div v-if="type === 'select'" class="selectable">
         <select name="select" @input="updateValue">
@@ -59,14 +40,22 @@
             {{ elem }}
           </option>
         </select>
+        <AErrorMessage
+          :errorMsg="errorMsg"
+          :maxInputLength="maxInputLength"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AErrorMessage from '@/components/shared/AErrorMessage'
 export default {
   name: 'AInput',
+  components: {
+    AErrorMessage
+  },
   props: {
     value: {
       type: [String, Number]
@@ -86,33 +75,20 @@ export default {
     },
     options: {
       type: Array
+    },
+    exceedBudget: {
+      type: Number
     }
   },
   data() {
-    return {
-      isActive: false,
-      isTouched: false,
-      initialValue: this.value,
-      initialType: this.type
-    }
+    return {}
   },
   methods: {
     updateValue(e) {
       this.$emit('input', e.target.value)
     },
-    onChange(e) {
-      this.$emit('change', e.target.value, e)
-    },
-    onFocus(e) {
-      this.isActive = true
-      this.$emit('focus', e)
-    },
-    onBlur(e) {
-      this.isActive = false
-      this.$emit('blur', e)
-    },
-    emitKeyUpEnter(e) {
-      this.$emit('keyup', e.target.value)
+    touchValue() {
+      this.$emit('touchValue')
     }
   }
 }
@@ -159,8 +135,10 @@ export default {
 }
 
 .selectable {
+  position: relative;
   border-bottom: 1px solid #abaaaa;
   margin-right: 10px;
+  height: 35px;
 }
 
 .main-input {
@@ -189,6 +167,7 @@ export default {
 .global-error {
   transition: 1s ease-in-out;
   position: absolute;
+  opacity: 1;
   top: 38px;
   left: 5px;
   color: red;
@@ -196,6 +175,7 @@ export default {
 
 select[name='select'] {
   width: 185px;
+  height: 34px;
   border: 0;
   outline: none;
 
@@ -223,5 +203,15 @@ input:focus + span,
 input:not(:-ms-input-placeholder) + span {
   opacity: 1;
   transform: scale(0.65) translateY(-50%) translateX(-30px);
+}
+
+.fade-input-tips-enter-active,
+.fade-input-tips-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-input-tips-enter,
+.fade-input-tips-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
 }
 </style>

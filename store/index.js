@@ -19,7 +19,8 @@ export const getters = {
     delete cloneBudget.transactionSums
     return cloneBudget
   },
-  getAvailableCurrencies: () => process.env.currency
+  getAvailableCurrencies: () => process.env.currency,
+  getCurrencyPairs: ({ currencyPairs }) => currencyPairs
 }
 
 export const actions = {
@@ -37,6 +38,7 @@ export const actions = {
       averageTransaction: 0,
       transactionSums: []
     })
+    $nuxt._router.push(`/budget/${id}`)
   },
   addTransaction({ state: { transactions, budgets, currencyPairs }, commit, dispatch }, {budgetId, target, sum, currency}) {
     let id;
@@ -44,7 +46,7 @@ export const actions = {
       id = uid(10)
     } while (transactions[budgetId] && id in transactions[budgetId])
     const currencyRate = currencyPairs[budgets[budgetId].currency][currency];
-    const sumInBudgetCurrency = sum * currencyRate;
+    const sumInBudgetCurrency = sum / currencyRate;
     let newTransactionSums = [...budgets[budgetId].transactionSums]
     newTransactionSums.push(sumInBudgetCurrency)
 

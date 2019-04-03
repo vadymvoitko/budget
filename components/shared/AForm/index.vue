@@ -15,9 +15,12 @@
             :type="item.type"
             :placeholder="item.placeholder"
             :value="item.value"
+            :maxInputLength="maxInputLength"
             :options="item.options"
-            :errorMsg="errorMsg[item.field]"
+            :error-msg="errorMsg[item.field]"
+            :exceedBudget="item.field === 'sum' ? exceedBudget : 0"
             @input="enterInput(item, $event)"
+            @touchValue="touchValue(item.field)"
           />
         </div>
         <div class="form__actions">
@@ -63,6 +66,12 @@ export default {
     },
     errorMsg: {
       required: true
+    },
+    maxInputLength: {
+      type: Number
+    },
+    exceedBudget: {
+      type: Number
     }
   },
   data() {
@@ -75,6 +84,9 @@ export default {
     enterInput(item, value) {
       this.formData[item.field] = value
       this.$emit('inputValue', item.field, value)
+    },
+    touchValue(item) {
+      this.$emit('touchValue', item)
     }
   }
 }

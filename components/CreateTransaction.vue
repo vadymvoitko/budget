@@ -4,11 +4,14 @@
       header="Create transaction"
       :inputs="inputs"
       :buttons="buttons"
-      :errorMsg="$v"
-      closeAction="toggleTransactionForm"
+      :error-msg="$v"
+      :max-input-length="30"
+      :exceed-budget="availableBudget"
+      close-action="toggleTransactionForm"
       @toggleTransactionForm="$emit('toggleTransactionForm')"
       @createTransaction="createTransaction"
       @inputValue="inputValue"
+      @touchValue="touchValue"
     />
   </div>
 </template>
@@ -16,7 +19,7 @@
 <script>
 import AForm from '~/components/shared/AForm'
 import { mapActions, mapGetters } from 'vuex'
-import { required } from 'vuelidate/src/validators'
+import { required, maxLength } from 'vuelidate/src/validators'
 export default {
   name: 'CreateTransaction',
   components: {
@@ -25,7 +28,8 @@ export default {
   props: {},
   validations: {
     target: {
-      required
+      required,
+      maxLength: maxLength(30)
     },
     currency: {
       required
@@ -39,6 +43,7 @@ export default {
       target: '',
       currency: '',
       sum: '',
+      availableBudget: 0,
       buttons: [
         {
           text: 'Create',
@@ -53,7 +58,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getAvailableCurrencies: 'getAvailableCurrencies'
+      getAvailableCurrencies: 'getAvailableCurrencies',
+      getBudgetById: 'getBudgetById',
+      getCurrencyPairs: 'getCurrencyPairs'
     }),
     inputs() {
       return [
@@ -61,20 +68,20 @@ export default {
           type: 'text',
           field: 'target',
           placeholder: 'target',
-          value: ''
+          value: this.target
         },
         {
           type: 'select',
           field: 'currency',
           placeholder: 'currency',
           options: this.getAvailableCurrencies,
-          value: ''
+          value: this.currency
         },
         {
           type: 'number',
           field: 'sum',
           placeholder: 'sum',
-          value: ''
+          value: this.sum
         }
       ]
     }
@@ -82,17 +89,31 @@ export default {
   methods: {
     ...mapActions(['addTransaction']),
     createTransaction(data) {
+      this.$v.$touch()
+      if (this.$v.$anyError) return
+      const budgetById = this.getBudgetById(this.$route.params.id)
+      const budgetCurrency = budgetById && budgetById.currency
+      const budgetRemain = budgetById && budgetById.remBudget
+      if (
+        this.getCurrencyPairs[budgetCurrency] &&
+        this.sum / this.getCurrencyPairs[budgetCurrency][this.currency] >
+          budgetRemain
+      ) {
+        this.availableBudget =
+          budgetRemain * this.getCurrencyPairs[budgetCurrency][this.currency]
+        return
+      } else {
+        this.availableBudget = 0
+      }
       this.addTransaction({ budgetId: this.$route.params.id, ...data })
       this.$emit('toggleTransactionForm')
     },
     inputValue(field, value) {
       this[field] = value
+    },
+    touchValue(field) {
       this.$v[field].$touch()
-      console.log(this.$v[field])
     }
-  },
-  created() {
-    console.log(this.$v)
   }
 }
 </script>
