@@ -7,7 +7,7 @@
       close-action="toggleBudgetForm"
       :error-msg="$v"
       :max-input-length="30"
-      @toggleBudgetForm="$router.push('/')"
+      @toggleBudgetForm="$router.go(-1)"
       @createBudget="createBudget"
       @inputValue="inputValue"
       @touchValue="touchValue"
