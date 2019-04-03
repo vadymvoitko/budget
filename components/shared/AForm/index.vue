@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { Decimal as D } from 'decimal.js'
 import AInput from './../AInput'
 import AButton from './../AButton'
 export default {
@@ -82,7 +83,7 @@ export default {
   },
   methods: {
     enterInput(item, value) {
-      this.formData[item.field] = value
+      this.formData[item.field] = isNaN(+value) ? value : new D(value)
       this.$emit('inputValue', item.field, value)
     },
     touchValue(item) {

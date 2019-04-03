@@ -3,6 +3,7 @@ import * as types from '~/store/mutation-types'
 import Vue from 'vue'
 import uid from 'uid'
 import axios from 'axios'
+import { Decimal as D } from 'decimal.js'
 
 export const state = () => ({
   currencyPairs: {},
@@ -33,9 +34,9 @@ export const actions = {
       currency,
       sum,
       remBudget: sum,
-      minTransaction: 0,
-      maxTransaction: 0,
-      averageTransaction: 0,
+      minTransaction: new D(0),
+      maxTransaction: new D(0),
+      averageTransaction: new D(0),
       transactionSums: []
     })
     $nuxt._router.push(`/budget/${id}`)
@@ -45,8 +46,8 @@ export const actions = {
     do {
       id = uid(10)
     } while (transactions[budgetId] && id in transactions[budgetId])
-    const currencyRate = currencyPairs[budgets[budgetId].currency][currency];
-    const sumInBudgetCurrency = sum / currencyRate;
+    const currencyRate = new D(currencyPairs[budgets[budgetId].currency][currency]);
+    const sumInBudgetCurrency = new D(sum.div(currencyRate).toFixed(2));
     let newTransactionSums = [...budgets[budgetId].transactionSums]
     newTransactionSums.push(sumInBudgetCurrency)
 
@@ -70,7 +71,7 @@ export const actions = {
     })
   },
   calculateBudget({ state, commit }, { budgetId, sumInBudgetCurrency}) {
-    const newSum = state.budgets[budgetId].remBudget - sumInBudgetCurrency
+    const newSum = new D(new D(state.budgets[budgetId].remBudget).sub(sumInBudgetCurrency).toFixed(2))
     commit(types.UPDATE_BUDGET, { budgetId, newSum })
   },
   deleteTransaction({commit, state: {budgets, transactions}, dispatch}, {budgetId, transactionId}){
@@ -78,7 +79,7 @@ export const actions = {
       commit(types.SHOW_ERROR, 'Cannot delete item');
       return;
     }
-    const newSum = budgets[budgetId].remBudget + transactions[budgetId][transactionId].sumInBudgetCurrency
+    const newSum = new D(budgets[budgetId].remBudget).add(new D(transactions[budgetId][transactionId].sumInBudgetCurrency))
     let newTransactionSums = [...budgets[budgetId].transactionSums]
     newTransactionSums.splice(newTransactionSums.indexOf(transactions[budgetId][transactionId].sumInBudgetCurrency), 1)
     commit(types.UPDATE_BUDGET_TRANSACTION_SUMMS, {
@@ -115,19 +116,15 @@ export const actions = {
   calculateBudgetsStatistic({commit, state}, budgetId) {
     const transactionSumsById = state.budgets[budgetId].transactionSums;
     const stats = transactionSumsById.reduce((acc, next) => {
-      acc.average += +next
-      acc.min = acc.min !== undefined && acc.min <= next ? acc.min : next
-      acc.max = acc.max >= next ? acc.max : next
-      return {
-        min: acc.min,
-        max: acc.max,
-        average: acc.average,
-      }
+      acc.average = acc.average.add(next)
+      acc.min = acc.min !== undefined && acc.min.lte(next) ? acc.min : next
+      acc.max = acc.max.gte(next) ? acc.max : next
+      return acc
     },{
-      max: 0,
-      average: 0
+      max: new D(0),
+      average: new D(0)
     })
-    stats.average /= transactionSumsById.length
+    stats.average = new D(stats.average.div(new D(transactionSumsById.length)).toFixed(2))
     commit(types.UPDATE_STATISTIC, {stats, budgetId})
   }
 }
