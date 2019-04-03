@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { Decimal as D } from 'decimal.js'
 import AForm from '~/components/shared/AForm'
 import { mapActions, mapGetters } from 'vuex'
 import { required, maxLength } from 'vuelidate/src/validators'
@@ -42,8 +43,8 @@ export default {
     return {
       target: '',
       currency: '',
-      sum: '',
-      availableBudget: 0,
+      sum: new D(0),
+      availableBudget: new D(0),
       buttons: [
         {
           text: 'Create',
@@ -96,14 +97,13 @@ export default {
       const budgetRemain = budgetById && budgetById.remBudget
       if (
         this.getCurrencyPairs[budgetCurrency] &&
-        this.sum / this.getCurrencyPairs[budgetCurrency][this.currency] >
-          budgetRemain
+        this.sum.div(this.getCurrencyPairs[budgetCurrency][this.currency]).gt(budgetRemain)
       ) {
         this.availableBudget =
-          budgetRemain * this.getCurrencyPairs[budgetCurrency][this.currency]
+          budgetRemain.times(this.getCurrencyPairs[budgetCurrency][this.currency])
         return
       } else {
-        this.availableBudget = 0
+        this.availableBudget = new D(0)
       }
       this.addTransaction({ budgetId: this.$route.params.id, ...data })
       this.$emit('toggleTransactionForm')
