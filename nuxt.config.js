@@ -66,9 +66,11 @@ export default {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /(node_modules)/,
+          transpile: ['vuelidate/src/validators']
         })
       }
-    }
+    },
+    transpile: ['vuelidate/src/validators']
   }
 }

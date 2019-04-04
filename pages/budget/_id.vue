@@ -1,39 +1,39 @@
 <template>
-  <section class="container">
-    <div class="budget__card">
+  <section class="budget-by-id__container">
+    <div class="budget-by-id__card">
       <h1>Budget info</h1>
-      <div class="budget__table">
+      <div class="budget-by-id__table">
         <div
           v-for="(value, key) in getBudget"
           :key="key"
-          class="budget__table-line"
+          class="budget-by-id__table-line"
         >
           <p>{{ key }}</p>
           <p>{{ value }}</p>
         </div>
       </div>
     </div>
-    <div class="budget__transactions">
+    <div class="budget-by-id__transactions">
       Transactions
     </div>
-    <div class="budget__transactions-list">
+    <div class="budget-by-id__transactions-list">
       <div
         v-for="value in getTransactionsByBudgetId($route.params.id)"
         :key="value.id"
-        class="budget__transactions-item"
+        class="budget-by-id__transactions-item"
       >
-        <div class="budget__transactions-list__text">
-          <div class="budget__transactions-cell">
+        <div class="budget-by-id__transactions-list__text">
+          <div class="budget-by-id__transactions-cell">
             {{ value.target }}
           </div>
-          <div class="budget__transactions-cell">
+          <div class="budget-by-id__transactions-cell">
             {{ value.sum }}
           </div>
-          <div class="budget__transactions-cell">
+          <div class="budget-by-id__transactions-cell">
             {{ value.currency }}
           </div>
         </div>
-        <div class="budget__transactions-cell right">
+        <div class="budget-by-id__transactions-cell right">
           <AButton
             flat
             text="delete"
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="budget__transactions">
+    <div class="budget-by-id__transactions">
       <AButton text="+ New transaction" @click="toggleTransactionForm" />
     </div>
     <CreateTransaction
@@ -93,23 +93,22 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  width: 100%;
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.budget {
+.budget-by-id {
   &__card {
     width: 400px;
     min-height: 350px;
     background-color: #fff;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
       0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  }
+  &__container {
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   &__table {

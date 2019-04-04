@@ -97,10 +97,13 @@ export default {
       const budgetRemain = budgetById && budgetById.remBudget
       if (
         this.getCurrencyPairs[budgetCurrency] &&
-        this.sum.div(this.getCurrencyPairs[budgetCurrency][this.currency]).gt(budgetRemain)
+        this.sum
+          .div(this.getCurrencyPairs[budgetCurrency][this.currency])
+          .gt(budgetRemain)
       ) {
-        this.availableBudget =
-          budgetRemain.times(this.getCurrencyPairs[budgetCurrency][this.currency])
+        this.availableBudget = budgetRemain.times(
+          this.getCurrencyPairs[budgetCurrency][this.currency]
+        )
         return
       } else {
         this.availableBudget = new D(0)
