@@ -119,6 +119,8 @@ export const actions = {
   calculateBudgetsStatistic({commit, state}, budgetId) {
     const transactionSumsById = state.budgets[budgetId].transactionSums;
     const stats = transactionSumsById.reduce((acc, next) => {
+      console.log(next)
+      console.log(new D(next))
       acc.average = acc.average.add(next)
       acc.min = acc.min !== undefined && acc.min.lte(next) ? acc.min : next
       acc.max = acc.max.gte(next) ? acc.max : next

@@ -4,7 +4,7 @@
       header="Create transaction"
       :inputs="inputs"
       :buttons="buttons"
-      :error-msg="$v"
+      :validation="$v"
       :max-input-length="30"
       :exceed-budget="availableBudget.toFixed(2)"
       close-action="toggleTransactionForm"
@@ -97,6 +97,7 @@ export default {
       const budgetById = this.getBudgetById(this.$route.params.id)
       const budgetCurrency = budgetById && budgetById.currency
       const budgetRemain = budgetById && budgetById.remBudget
+
       if (
         this.getCurrencyPairs[budgetCurrency] &&
         new D(this.sum)

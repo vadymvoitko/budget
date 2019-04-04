@@ -2,10 +2,10 @@
   <transition name="fade-input-tips" mode="in-out">
     <span
       v-if="
-        !errorMsg.required &&
-          errorMsg.$invalid &&
-          typeof errorMsg.required !== 'undefined' &&
-          errorMsg.$dirty
+        !validation.required &&
+          validation.$invalid &&
+          typeof validation.required !== 'undefined' &&
+          validation.$dirty
       "
       class="global-error"
     >
@@ -13,10 +13,10 @@
     </span>
     <span
       v-else-if="
-        !errorMsg.maxLength &&
-          errorMsg.$invalid &&
-          typeof errorMsg.maxLength !== 'undefined' &&
-          errorMsg.$dirty
+        !validation.maxLength &&
+          validation.$invalid &&
+          typeof validation.maxLength !== 'undefined' &&
+          validation.$dirty
       "
       class="global-error"
     >
@@ -24,10 +24,10 @@
     </span>
     <span
       v-else-if="
-        !errorMsg.alpha &&
-          errorMsg.$invalid &&
-          typeof errorMsg.alpha !== 'undefined' &&
-          errorMsg.$dirty
+        !validation.alpha &&
+          validation.$invalid &&
+          typeof validation.alpha !== 'undefined' &&
+          validation.$dirty
       "
       class="global-error"
     >
@@ -35,10 +35,10 @@
     </span>
     <span
       v-else-if="
-        !errorMsg.minValue &&
-          errorMsg.$invalid &&
-          typeof errorMsg.minValue !== 'undefined' &&
-          errorMsg.$dirty
+        !validation.minValue &&
+          validation.$invalid &&
+          typeof validation.minValue !== 'undefined' &&
+          validation.$dirty
       "
       class="global-error"
     >
@@ -54,7 +54,7 @@
 export default {
   name: 'AErrorMessage',
   props: {
-    errorMsg: {
+    validation: {
       default: null
     },
     maxInputLength: {

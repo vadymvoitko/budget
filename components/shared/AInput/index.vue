@@ -18,7 +18,7 @@
         </label>
         <!-- eslint-disable -->
         <AErrorMessage
-          :errorMsg="errorMsg"
+          :validation="validation"
           :maxInputLength="maxInputLength"
           :exceedBudget="exceedBudget"
         />
@@ -41,7 +41,7 @@
           </option>
         </select>
         <AErrorMessage
-          :errorMsg="errorMsg"
+          :validation="validation"
           :maxInputLength="maxInputLength"
         />
       </div>
@@ -64,7 +64,7 @@ export default {
       type: String,
       default: 'text'
     },
-    errorMsg: {
+    validation: {
       default: null
     },
     placeholder: {

@@ -5,7 +5,7 @@
       close-action="toggleBudgetForm"
       :inputs="inputs"
       :buttons="buttons"
-      :error-msg="$v"
+      :validation="$v"
       :max-input-length="30"
       @toggleBudgetForm="$router.go(-1)"
       @createBudget="createBudget"

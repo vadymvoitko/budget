@@ -17,7 +17,7 @@
             :value="item.value"
             :maxInputLength="maxInputLength"
             :options="item.options"
-            :error-msg="errorMsg[item.field]"
+            :validation="validation[item.field]"
             :exceedBudget="item.field === 'sum' ? exceedBudget : 0"
             @input="enterInput(item, $event)"
             @touchValue="touchValue(item.field)"
@@ -65,7 +65,7 @@ export default {
       required: true,
       type: String
     },
-    errorMsg: {
+    validation: {
       required: true
     },
     maxInputLength: {
