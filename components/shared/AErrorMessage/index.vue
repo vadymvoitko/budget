@@ -22,7 +22,29 @@
     >
       field shouldn't be longer then {{ maxInputLength }}
     </span>
-    <span v-else-if="exceedBudget" class="global-error">
+    <span
+      v-else-if="
+        !errorMsg.alpha &&
+          errorMsg.$invalid &&
+          typeof errorMsg.alpha !== 'undefined' &&
+          errorMsg.$dirty
+      "
+      class="global-error"
+    >
+      only letters allowed
+    </span>
+    <span
+      v-else-if="
+        !errorMsg.minValue &&
+          errorMsg.$invalid &&
+          typeof errorMsg.minValue !== 'undefined' &&
+          errorMsg.$dirty
+      "
+      class="global-error"
+    >
+      negative values are not allowed
+    </span>
+    <span v-else-if="+exceedBudget" class="global-error">
       Only {{ exceedBudget }} is available. Get modest ;)
     </span>
   </transition>
@@ -39,7 +61,7 @@ export default {
       type: Number
     },
     exceedBudget: {
-      type: Number
+      type: [Number, String]
     }
   }
 }

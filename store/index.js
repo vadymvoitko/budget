@@ -2,12 +2,11 @@
 import * as types from '~/store/mutation-types'
 import Vue from 'vue'
 import uid from 'uid'
-import axios from 'axios'
 import { Decimal as D } from 'decimal.js'
+import { http } from './axiosConfig'
 
 export const state = () => ({
   currencyPairs: {},
-  currencyExchangeURL: 'https://api.exchangeratesapi.io/latest',
   budgets: {},
   transactions: {}
 })
@@ -32,7 +31,7 @@ export const actions = {
       id,
       name,
       currency,
-      sum,
+      sum: new D(sum.toFixed(2)),
       remBudget: sum,
       minTransaction: new D(0),
       maxTransaction: new D(0),
@@ -46,9 +45,10 @@ export const actions = {
     do {
       id = uid(10)
     } while (transactions[budgetId] && id in transactions[budgetId])
-    const currencyRate = new D(currencyPairs[budgets[budgetId].currency][currency]);
+    const budgetById = budgets[budgetId];
+    const currencyRate = new D(currencyPairs[budgetById.currency][currency]);
     const sumInBudgetCurrency = new D(sum.div(currencyRate).toFixed(2));
-    let newTransactionSums = [...budgets[budgetId].transactionSums]
+    let newTransactionSums = [...budgetById.transactionSums]
     newTransactionSums.push(sumInBudgetCurrency)
 
     commit(types.UPDATE_BUDGET_TRANSACTION_SUMMS, {
@@ -59,7 +59,7 @@ export const actions = {
       id,
       target,
       currency,
-      sum,
+      sum: new D(sum.toFixed(2)),
       budgetId,
       sumInBudgetCurrency
     })
@@ -75,32 +75,35 @@ export const actions = {
     commit(types.UPDATE_BUDGET, { budgetId, newSum })
   },
   deleteTransaction({commit, state: {budgets, transactions}, dispatch}, {budgetId, transactionId}){
-    if (!(transactions[budgetId] && transactions[budgetId][transactionId] && budgets[budgetId])) {
+    const transactionByBudgetId = transactions[budgetId];
+    const budgetById = budgets[budgetId];
+    const transactionById = transactionByBudgetId[transactionId];
+    if (!(transactionByBudgetId && transactionById && budgetById)) {
       commit(types.SHOW_ERROR, 'Cannot delete item');
       return;
     }
-    const newSum = new D(budgets[budgetId].remBudget).add(new D(transactions[budgetId][transactionId].sumInBudgetCurrency))
-    let newTransactionSums = [...budgets[budgetId].transactionSums]
-    newTransactionSums.splice(newTransactionSums.indexOf(transactions[budgetId][transactionId].sumInBudgetCurrency), 1)
+    const newSum = new D(budgetById.remBudget).add(new D(transactionById.sumInBudgetCurrency))
+    let newTransactionSums = [...budgetById.transactionSums]
+    newTransactionSums.splice(newTransactionSums.indexOf(transactionById.sumInBudgetCurrency), 1)
     commit(types.UPDATE_BUDGET_TRANSACTION_SUMMS, {
       budgetId,
       newTransactionSums
     })
+    dispatch('calculateBudgetsStatistic', budgetId)
     commit(types.UPDATE_BUDGET, {
       budgetId: budgetId,
       newSum: newSum
     })
     commit(types.DELETE_TRANSACTION, {budgetId, transactionId})
-    dispatch('calculateBudgetsStatistic', budgetId)
   },
   async generateCurrencyPairs({state, getters, commit, dispatch}) {
     await getters.getAvailableCurrencies.forEach(async base => {
       try {
-        const response = await axios.get(state.currencyExchangeURL, {params: {base}} );
+        const response = await http.get('/latest', {params: {base}} );
         const rates = response.data && response.data.rates
         commit(types.SET_CURRENCY_PAIRS, {base, rates})
       } catch (err) {
-        console.log(err)
+        commit(types.SHOW_ERROR, err)
       }
     });
     setTimeout(() => {
@@ -125,6 +128,8 @@ export const actions = {
       average: new D(0)
     })
     stats.average = new D(stats.average.div(new D(transactionSumsById.length)).toFixed(2))
+    if (isNaN(stats.average)) stats.average = 0;
+    if (!stats.min) stats.min = 0;
     commit(types.UPDATE_STATISTIC, {stats, budgetId})
   }
 }

@@ -6,9 +6,9 @@
       :buttons="buttons"
       :error-msg="$v"
       :max-input-length="30"
-      :exceed-budget="availableBudget"
+      :exceed-budget="availableBudget.toFixed(2)"
       close-action="toggleTransactionForm"
-      @toggleTransactionForm="$emit('toggleTransactionForm')"
+      @toggleTransactionForm="$router.go(-1)"
       @createTransaction="createTransaction"
       @inputValue="inputValue"
       @touchValue="touchValue"
@@ -20,7 +20,7 @@
 import { Decimal as D } from 'decimal.js'
 import AForm from '~/components/shared/AForm'
 import { mapActions, mapGetters } from 'vuex'
-import { required, maxLength } from 'vuelidate/src/validators'
+import { required, maxLength, alpha, minValue } from 'vuelidate/src/validators'
 export default {
   name: 'CreateTransaction',
   components: {
@@ -30,21 +30,23 @@ export default {
   validations: {
     target: {
       required,
+      alpha,
       maxLength: maxLength(30)
     },
     currency: {
       required
     },
     sum: {
-      required
+      required,
+      minValue: minValue(0)
     }
   },
   data() {
     return {
       target: '',
       currency: '',
-      sum: new D(0),
-      availableBudget: new D(0),
+      sum: '',
+      availableBudget: 0,
       buttons: [
         {
           text: 'Create',
@@ -97,7 +99,7 @@ export default {
       const budgetRemain = budgetById && budgetById.remBudget
       if (
         this.getCurrencyPairs[budgetCurrency] &&
-        this.sum
+        new D(this.sum)
           .div(this.getCurrencyPairs[budgetCurrency][this.currency])
           .gt(budgetRemain)
       ) {
@@ -109,7 +111,7 @@ export default {
         this.availableBudget = new D(0)
       }
       this.addTransaction({ budgetId: this.$route.params.id, ...data })
-      this.$emit('toggleTransactionForm')
+      this.$router.go(-1)
     },
     inputValue(field, value) {
       this[field] = value

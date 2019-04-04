@@ -58,7 +58,7 @@ export default {
   },
   props: {
     value: {
-      type: [String, Number]
+      type: [String, Number, Object]
     },
     type: {
       type: String,
@@ -77,7 +77,7 @@ export default {
       type: Array
     },
     exceedBudget: {
-      type: Number
+      type: [Number, String]
     }
   },
   data() {

@@ -18,7 +18,7 @@
 <script>
 import AForm from '~/components/shared/AForm'
 import { mapActions, mapGetters } from 'vuex'
-import { required, maxLength } from 'vuelidate/src/validators'
+import { required, maxLength, alpha, minValue } from 'vuelidate/src/validators'
 export default {
   name: 'CreateBudget',
   components: {
@@ -28,13 +28,15 @@ export default {
   validations: {
     name: {
       required,
+      alpha,
       maxLength: maxLength(30)
     },
     currency: {
       required
     },
     sum: {
-      required
+      required,
+      minValue: minValue(0)
     }
   },
   data() {

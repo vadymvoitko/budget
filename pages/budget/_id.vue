@@ -48,24 +48,22 @@
       </div>
     </div>
     <div class="budget-by-id__transactions">
-      <AButton text="+ New transaction" @click="toggleTransactionForm" />
+      <nuxt-link
+        :to="{ name: 'createTransaction', params: { id: $route.params.id } }"
+      >
+        <AButton text="+ New transaction" />
+      </nuxt-link>
     </div>
-    <CreateTransaction
-      v-if="transactionFormOpen"
-      @toggleTransactionForm="toggleTransactionForm"
-    />
   </section>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import AButton from '~/components/shared/AButton'
-import CreateTransaction from '~/components/CreateTransaction'
 
 export default {
   components: {
-    AButton,
-    CreateTransaction
+    AButton
   },
   data() {
     return {
@@ -138,6 +136,10 @@ export default {
     width: 100%;
     font-weight: bold;
     font-size: 30px;
+
+    & > a {
+      text-decoration: none;
+    }
   }
 
   &__transactions-list {

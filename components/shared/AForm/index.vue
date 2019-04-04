@@ -72,7 +72,7 @@ export default {
       type: Number
     },
     exceedBudget: {
-      type: Number
+      type: [Number, String]
     }
   },
   data() {
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     enterInput(item, value) {
-      this.formData[item.field] = isNaN(+value) ? value : new D(value)
+      this.formData[item.field] = !value || isNaN(+value) ? value : new D(value)
       this.$emit('inputValue', item.field, value)
     },
     touchValue(item) {
