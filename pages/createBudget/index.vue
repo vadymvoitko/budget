@@ -2,9 +2,9 @@
   <div>
     <AForm
       header="Create budget"
+      close-action="toggleBudgetForm"
       :inputs="inputs"
       :buttons="buttons"
-      close-action="toggleBudgetForm"
       :error-msg="$v"
       :max-input-length="30"
       @toggleBudgetForm="$router.go(-1)"
@@ -95,9 +95,6 @@ export default {
     touchValue(field) {
       this.$v[field].$touch()
     }
-  },
-  created() {
-    console.log(maxLength)
   }
 }
 </script>

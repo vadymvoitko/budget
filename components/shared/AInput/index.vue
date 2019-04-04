@@ -106,18 +106,6 @@ export default {
     font-weight: 400;
   }
 
-  input[type='number'] {
-    &::-webkit-inner-spin-button,
-    &::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    -moz-appearance: textfield;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
   .control {
     display: flex;
     flex-direction: column;
