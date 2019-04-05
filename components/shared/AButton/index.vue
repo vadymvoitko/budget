@@ -17,10 +17,12 @@ export default {
       type: String
     },
     styles: {
-      type: Object
+      type: Object,
+      default: () => ({})
     },
     flat: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   }
 }

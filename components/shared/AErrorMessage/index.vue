@@ -55,12 +55,15 @@ export default {
   name: 'AErrorMessage',
   props: {
     validation: {
-      default: null
+      default: null,
+      type: Object
     },
     maxInputLength: {
+      default: 30,
       type: Number
     },
     exceedBudget: {
+      default: 0,
       type: [Number, String]
     }
   }

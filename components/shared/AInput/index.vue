@@ -58,26 +58,32 @@ export default {
   },
   props: {
     value: {
-      type: [String, Number, Object]
+      type: [String, Number, Object],
+      default: ''
     },
     type: {
       type: String,
       default: 'text'
     },
     validation: {
+      type: Object,
       default: null
     },
     placeholder: {
-      type: String
+      type: String,
+      default: ''
     },
     maxInputLength: {
-      type: Number
+      type: Number,
+      default: 30
     },
     options: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     exceedBudget: {
-      type: [Number, String]
+      type: [Number, String],
+      default: 0
     }
   },
   data() {

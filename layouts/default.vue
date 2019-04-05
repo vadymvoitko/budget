@@ -42,18 +42,18 @@ export default {
       transactionFormOpen: false
     }
   },
+  created() {
+    this.generateCurrencyPairs()
+  },
+  mounted() {
+    this.deriveDataFromStorage()
+  },
   methods: {
     ...mapActions([
       'generateCurrencyPairs',
       'fetchCurrencyPairs',
       'deriveDataFromStorage'
     ])
-  },
-  created() {
-    this.generateCurrencyPairs()
-  },
-  mounted() {
-    this.deriveDataFromStorage()
   }
 }
 </script>

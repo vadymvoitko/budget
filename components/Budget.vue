@@ -24,6 +24,9 @@ import { mapGetters } from 'vuex'
 import AButton from '~/components/shared/AButton'
 export default {
   name: 'Budget',
+  components: {
+    AButton
+  },
   data() {
     return {
       budgetFormOpen: false
@@ -31,9 +34,6 @@ export default {
   },
   computed: {
     ...mapGetters({ getBudgets: 'getBudgets' })
-  },
-  components: {
-    AButton
   }
 }
 </script>

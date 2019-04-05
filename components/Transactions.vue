@@ -1,7 +1,7 @@
 <template>
   <div class="budget-by-id__transactions-list">
     <div
-      v-for="value in getTransactionsByBudgetId($route.params.id)"
+      v-for="value in getTransactionsByBudgetId(this.$route.params.id)"
       :key="value.id"
       class="budget-by-id__transactions-item"
     >
@@ -36,70 +36,22 @@ export default {
   },
   data() {
     return {
-      transactionFormOpen: false
+      flag: false
     }
   },
   computed: {
     ...mapGetters({
-      getTransactionsByBudgetId: 'getTransactionsByBudgetId',
-      getBudgetById: 'getBudgetById'
-    }),
-    getBudget() {
-      const budget = { ...this.getBudgetById(this.$route.params.id) }
-      delete budget.transactions
-      return budget
-    }
+      getTransactionsByBudgetId: 'getTransactionsByBudgetId'
+    })
   },
   methods: {
-    ...mapActions(['deleteTransaction']),
-    toggleTransactionForm() {
-      this.transactionFormOpen = !this.transactionFormOpen
-    }
+    ...mapActions(['deleteTransaction'])
   }
 }
 </script>
 
 <style lang="scss">
 .budget-by-id {
-  &__card {
-    width: 450px;
-    min-height: 350px;
-    background-color: #fff;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-  &__container {
-    width: 100%;
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  &__table {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    padding-bottom: 20px;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  &__table-line {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-
-    & p {
-      text-align: left;
-      width: 100%;
-      padding-left: 50px;
-    }
-  }
-
   &__transactions {
     padding: 25px;
     height: 30px;

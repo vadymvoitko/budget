@@ -111,10 +111,16 @@ export const actions = {
     }, 108000);
   },
   deriveDataFromStorage({commit}) {
+    const reviver = (key, value) => {
+      if (!isNaN(+value) && value.toFixed)
+      return new D(value)
+      else
+      return value
+    }
     const budgets = localStorage.getItem('budgets')
     const transactions = localStorage.getItem('transactions')
-    budgets && commit(types.INIT_BUDGETS, JSON.parse(budgets))
-    transactions && commit(types.INIT_TRANSACTIONS, JSON.parse(transactions))
+    budgets && commit(types.INIT_BUDGETS, JSON.parse(budgets, reviver))
+    transactions && commit(types.INIT_TRANSACTIONS, JSON.parse(transactions, reviver))
   },
   calculateBudgetsStatistic({commit, state}, budgetId) {
     const transactionSumsById = state.budgets[budgetId].transactionSums;
@@ -158,7 +164,9 @@ export const mutations = {
     localStorage.setItem('budgets', JSON.stringify(budgets))
   },
   [types.DELETE_TRANSACTION]({ transactions, budgets }, { budgetId, transactionId }) {
-    delete transactions[budgetId][transactionId]
+    const transactionByBudgetId = { ...transactions[budgetId]}
+    delete transactionByBudgetId[transactionId]
+    Vue.set(transactions, budgetId, transactionByBudgetId) // avoiding reactivity issues
     localStorage.setItem('transactions', JSON.stringify(transactions))
   },
   [types.SHOW_ERROR](state, payload) {
