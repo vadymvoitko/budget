@@ -34,11 +34,6 @@ export default {
   components: {
     AButton
   },
-  data() {
-    return {
-      flag: false
-    }
-  },
   computed: {
     ...mapGetters({
       getTransactionsByBudgetId: 'getTransactionsByBudgetId'

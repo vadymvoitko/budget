@@ -80,7 +80,6 @@ export default {
   },
   data() {
     return {
-      formOpen: false,
       formData: {}
     }
   },

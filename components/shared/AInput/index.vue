@@ -18,9 +18,11 @@
         </label>
         <!-- eslint-disable -->
         <AErrorMessage
-          :validation="validation"
-          :maxInputLength="maxInputLength"
-          :exceedBudget="exceedBudget"
+          v-bind="{
+            validation,
+            maxInputLength,
+            exceedBudget
+          }"
         />
       </p>
       <div v-if="type === 'select'" class="selectable">

@@ -27,11 +27,6 @@ export default {
   components: {
     AButton
   },
-  data() {
-    return {
-      budgetFormOpen: false
-    }
-  },
   computed: {
     ...mapGetters({ getBudgets: 'getBudgets' })
   }
