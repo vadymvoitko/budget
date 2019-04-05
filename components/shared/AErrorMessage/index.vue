@@ -55,12 +55,15 @@ export default {
   name: 'AErrorMessage',
   props: {
     validation: {
-      default: null
+      default: null,
+      type: Object
     },
     maxInputLength: {
+      default: 30,
       type: Number
     },
     exceedBudget: {
+      default: 0,
       type: [Number, String]
     }
   }
@@ -83,7 +86,7 @@ export default {
 }
 
 .fade-input-tips-enter,
-  .fade-input-tips-leave-to /* .fade-leave-active in <2.1.8 */ {
+.fade-input-tips-leave-to {
   opacity: 0;
 }
 </style>

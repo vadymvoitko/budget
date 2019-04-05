@@ -16,37 +16,7 @@
     <div class="budget-by-id__transactions">
       Transactions
     </div>
-    <div class="budget-by-id__transactions-list">
-      <div
-        v-for="value in getTransactionsByBudgetId($route.params.id)"
-        :key="value.id"
-        class="budget-by-id__transactions-item"
-      >
-        <div class="budget-by-id__transactions-list__text">
-          <div class="budget-by-id__transactions-cell">
-            {{ value.target }}
-          </div>
-          <div class="budget-by-id__transactions-cell">
-            {{ value.sum }}
-          </div>
-          <div class="budget-by-id__transactions-cell">
-            {{ value.currency }}
-          </div>
-        </div>
-        <div class="budget-by-id__transactions-cell right">
-          <AButton
-            flat
-            text="delete"
-            @click="
-              deleteTransaction({
-                budgetId: $route.params.id,
-                transactionId: value.id
-              })
-            "
-          />
-        </div>
-      </div>
-    </div>
+    <Transactions />
     <div class="budget-by-id__transactions">
       <nuxt-link
         :to="{ name: 'createTransaction', params: { id: $route.params.id } }"
@@ -54,7 +24,10 @@
         <AButton text="+ New transaction" />
       </nuxt-link>
     </div>
+<<<<<<< HEAD
     <Transactions :budgetId="getTransactionsByBudgetId($route.params.id)" />
+=======
+>>>>>>> 7af31d8de0ce886d05904ff41deb9667d4b549a1
   </section>
 </template>
 
@@ -67,11 +40,6 @@ export default {
   components: {
     AButton,
     Transactions
-  },
-  data() {
-    return {
-      transactionFormOpen: false
-    }
   },
   filters: {
     transformKey(val) {
@@ -86,6 +54,11 @@ export default {
         averageTransaction: 'Average Transaction'
       }
       return pairs[val] || val
+    }
+  },
+  data() {
+    return {
+      transactionFormOpen: false
     }
   },
   computed: {
@@ -146,49 +119,6 @@ export default {
       text-align: left;
       width: 100%;
       padding-left: 50px;
-    }
-  }
-
-  &__transactions {
-    padding: 25px;
-    height: 30px;
-    width: 100%;
-    font-weight: bold;
-    font-size: 30px;
-
-    & > a {
-      text-decoration: none;
-    }
-  }
-
-  &__transactions-list {
-    width: 100%;
-
-    &__text {
-      display: flex;
-      width: 85%;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      align-items: center;
-    }
-  }
-
-  &__transactions-item {
-    width: 100%;
-    margin: 5px auto;
-    height: 50px;
-    background-color: #f5f5f5;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #80808000;
-
-    &:hover {
-      border: 1px solid #808080;
-      cursor: pointer;
     }
   }
 }

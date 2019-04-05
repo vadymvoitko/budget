@@ -15,10 +15,10 @@
             :type="item.type"
             :placeholder="item.placeholder"
             :value="item.value"
-            :maxInputLength="maxInputLength"
+            :max-input-length="maxInputLength"
             :options="item.options"
             :validation="validation[item.field]"
-            :exceedBudget="item.field === 'sum' ? exceedBudget : 0"
+            :exceed-budget="item.field === 'sum' ? exceedBudget : 0"
             @input="enterInput(item, $event)"
             @touchValue="touchValue(item.field)"
           />
@@ -66,18 +66,20 @@ export default {
       type: String
     },
     validation: {
+      type: Object,
       required: true
     },
     maxInputLength: {
-      type: Number
+      type: Number,
+      default: 30
     },
     exceedBudget: {
-      type: [Number, String]
+      type: [Number, String],
+      default: 0
     }
   },
   data() {
     return {
-      formOpen: false,
       formData: {}
     }
   },
