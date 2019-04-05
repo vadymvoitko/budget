@@ -1,11 +1,7 @@
 <template>
   <div class="budget-by-id__transactions-list">
     <div
-<<<<<<< HEAD
-      v-for="value in budgetId"
-=======
       v-for="value in getTransactionsByBudgetId(this.$route.params.id)"
->>>>>>> 7af31d8de0ce886d05904ff41deb9667d4b549a1
       :key="value.id"
       class="budget-by-id__transactions-item"
     >
