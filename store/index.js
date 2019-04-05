@@ -46,7 +46,7 @@ export const actions = {
       id = uid(10)
     } while (transactions[budgetId] && id in transactions[budgetId])
     const budgetById = budgets[budgetId];
-    const currencyRate = new D(currencyPairs[budgetById.currency][currency]);
+    const currencyRate = new D(currencyPairs[budgetById.currency] && currencyPairs[budgetById.currency][currency] || 1);
     const sumInBudgetCurrency = new D(sum.div(currencyRate).toFixed(2));
     let newTransactionSums = [...budgetById.transactionSums]
     newTransactionSums.push(sumInBudgetCurrency)
@@ -119,11 +119,9 @@ export const actions = {
   calculateBudgetsStatistic({commit, state}, budgetId) {
     const transactionSumsById = state.budgets[budgetId].transactionSums;
     const stats = transactionSumsById.reduce((acc, next) => {
-      console.log(next)
-      console.log(new D(next))
-      acc.average = acc.average.add(next)
-      acc.min = acc.min !== undefined && acc.min.lte(next) ? acc.min : next
-      acc.max = acc.max.gte(next) ? acc.max : next
+      acc.average = acc.average.add(new D(next))
+      acc.min = acc.min !== undefined && acc.min.lte(new D(next)) ? acc.min : new D(next)
+      acc.max = acc.max.gte(new D(next)) ? acc.max : new D(next)
       return acc
     },{
       max: new D(0),

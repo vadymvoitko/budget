@@ -97,16 +97,12 @@ export default {
       const budgetById = this.getBudgetById(this.$route.params.id)
       const budgetCurrency = budgetById && budgetById.currency
       const budgetRemain = budgetById && budgetById.remBudget
-
-      if (
+      let currencyRate =
         this.getCurrencyPairs[budgetCurrency] &&
-        new D(this.sum)
-          .div(this.getCurrencyPairs[budgetCurrency][this.currency])
-          .gt(budgetRemain)
-      ) {
-        this.availableBudget = budgetRemain.times(
-          this.getCurrencyPairs[budgetCurrency][this.currency]
-        )
+        this.getCurrencyPairs[budgetCurrency][this.currency]
+      currencyRate = currencyRate ? new D(currencyRate) : new D(1)
+      if (budgetRemain && new D(this.sum).div(currencyRate).gt(budgetRemain)) {
+        this.availableBudget = budgetRemain.times(currencyRate)
         return
       } else {
         this.availableBudget = new D(0)
