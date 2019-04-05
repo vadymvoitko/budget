@@ -1,7 +1,7 @@
 <template>
   <div class="budget-by-id__transactions-list">
     <div
-      v-for="value in getTransactionsByBudgetId($route.params.id)"
+      v-for="value in budgetId"
       :key="value.id"
       class="budget-by-id__transactions-item"
     >
@@ -50,6 +50,7 @@ export default {
       return budget
     }
   },
+  props: ['budgetId'],
   methods: {
     ...mapActions(['deleteTransaction']),
     toggleTransactionForm() {

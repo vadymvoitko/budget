@@ -54,7 +54,7 @@
         <AButton text="+ New transaction" />
       </nuxt-link>
     </div>
-    <Transactions />
+    <Transactions :budgetId="getTransactionsByBudgetId($route.params.id)" />
   </section>
 </template>
 
