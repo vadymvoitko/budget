@@ -49,11 +49,10 @@ export default {
     this.deriveDataFromStorage()
   },
   methods: {
-    ...mapActions([
-      'generateCurrencyPairs',
-      'fetchCurrencyPairs',
-      'deriveDataFromStorage'
-    ])
+    ...mapActions({
+      generateCurrencyPairs: 'currency-store/generateCurrencyPairs',
+      deriveDataFromStorage: 'deriveDataFromStorage'
+    })
   }
 }
 </script>

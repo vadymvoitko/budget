@@ -1,28 +1,39 @@
 <template>
-  <div>
-    <AForm
-      header="Create budget"
-      close-action="toggleBudgetForm"
-      :inputs="inputs"
-      :buttons="buttons"
-      :validation="$v"
-      :max-input-length="30"
-      @toggleBudgetForm="$router.go(-1)"
-      @createBudget="createBudget"
-      @inputValue="inputValue"
-      @touchValue="touchValue"
-    />
-  </div>
+  <AForm
+    header="Create budget"
+    close-action="toggleBudgetForm"
+    :inputs="inputs"
+    :validation="$v"
+    :max-input-length="30"
+    @toggleBudgetForm="toggleBudgetForm"
+    @inputValue="inputValue"
+    @touchValue="touchValue"
+  >
+    <template v-slot:buttons="{ formData }">
+      <AButton
+        text="+ Create"
+        :styles="{ margin: '10px' }"
+        @click="createBudget(formData)"
+      />
+      <AButton
+        text="Cancel"
+        :styles="{ margin: '10px' }"
+        @click="toggleBudgetForm"
+      />
+    </template>
+  </AForm>
 </template>
 
 <script>
 import AForm from '~/components/shared/AForm'
+import AButton from '~/components/shared/AButton'
 import { mapActions, mapGetters } from 'vuex'
 import { required, maxLength, alpha, minValue } from 'vuelidate/src/validators'
 export default {
   name: 'CreateBudget',
   components: {
-    AForm
+    AForm,
+    AButton
   },
   props: {},
   validations: {
@@ -43,22 +54,12 @@ export default {
     return {
       name: '',
       currency: '',
-      sum: '',
-      buttons: [
-        {
-          text: 'Create',
-          action: 'createBudget'
-        },
-        {
-          text: 'Cancel',
-          action: 'toggleBudgetForm'
-        }
-      ]
+      sum: ''
     }
   },
   computed: {
     ...mapGetters({
-      getAvailableCurrencies: 'getAvailableCurrencies'
+      getAvailableCurrencies: 'currency-store/getAvailableCurrencies'
     }),
     inputs() {
       return [
@@ -96,6 +97,9 @@ export default {
     },
     touchValue(field) {
       this.$v[field].$touch()
+    },
+    toggleBudgetForm() {
+      this.$router.go(-1)
     }
   }
 }

@@ -16,37 +16,7 @@
     <div class="budget-by-id__transactions">
       Transactions
     </div>
-    <div class="budget-by-id__transactions-list">
-      <div
-        v-for="value in getTransactionsByBudgetId($route.params.id)"
-        :key="value.id"
-        class="budget-by-id__transactions-item"
-      >
-        <div class="budget-by-id__transactions-list__text">
-          <div class="budget-by-id__transactions-cell">
-            {{ value.target }}
-          </div>
-          <div class="budget-by-id__transactions-cell">
-            {{ value.sum }}
-          </div>
-          <div class="budget-by-id__transactions-cell">
-            {{ value.currency }}
-          </div>
-        </div>
-        <div class="budget-by-id__transactions-cell right">
-          <AButton
-            flat
-            text="delete"
-            @click="
-              deleteTransaction({
-                budgetId: $route.params.id,
-                transactionId: value.id
-              })
-            "
-          />
-        </div>
-      </div>
-    </div>
+    <Transactions :budgetId="getTransactionsByBudgetId($route.params.id)" />
     <div class="budget-by-id__transactions">
       <nuxt-link
         :to="{ name: 'createTransaction', params: { id: $route.params.id } }"
@@ -54,7 +24,6 @@
         <AButton text="+ New transaction" />
       </nuxt-link>
     </div>
-    <Transactions :budgetId="getTransactionsByBudgetId($route.params.id)" />
   </section>
 </template>
 
@@ -79,7 +48,7 @@ export default {
         id: 'ID',
         name: 'Name',
         currency: 'Currency',
-        sum: 'Initial Sum',
+        sum: 'Initial Amount',
         remBudget: 'Remaining Budget',
         minTransaction: 'Minimal Transaction',
         maxTransaction: 'Maximal Transaction',

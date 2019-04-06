@@ -16,7 +16,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   env: {
-    currency: ['USD', 'EUR', 'GBP']
+    currency: ['USD', 'EUR', 'GBP', 'RUB']
   },
   /*
    ** Customize the progress-bar color

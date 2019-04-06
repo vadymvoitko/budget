@@ -24,13 +24,7 @@
           />
         </div>
         <div class="form__actions">
-          <AButton
-            v-for="(item, index) in buttons"
-            :key="index"
-            :text="item.text"
-            :styles="{ margin: '10px' }"
-            @click="$emit(item.action, formData)"
-          />
+          <slot name="buttons" :formData="formData" />
         </div>
       </div>
     </div>
@@ -40,12 +34,10 @@
 <script>
 import { Decimal as D } from 'decimal.js'
 import AInput from './../AInput'
-import AButton from './../AButton'
 export default {
   name: 'AForm',
   components: {
-    AInput,
-    AButton
+    AInput
   },
   props: {
     header: {
@@ -54,10 +46,6 @@ export default {
       default: 'Header'
     },
     inputs: {
-      required: true,
-      type: Array
-    },
-    buttons: {
       required: true,
       type: Array
     },

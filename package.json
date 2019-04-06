@@ -19,6 +19,7 @@
     "decimal.js": "^10.1.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "nuxt": "^2.4.0",
+    "rxjs": "^6.4.0",
     "uid": "0.0.2",
     "vuelidate": "^0.7.4"
   },

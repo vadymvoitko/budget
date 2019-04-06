@@ -3,10 +3,8 @@ import * as types from '~/store/mutation-types'
 import Vue from 'vue'
 import uid from 'uid'
 import { Decimal as D } from 'decimal.js'
-import { http } from './axiosConfig'
 
 export const state = () => ({
-  currencyPairs: {},
   budgets: {},
   transactions: {}
 })
@@ -20,7 +18,7 @@ export const getters = {
     return cloneBudget
   },
   getAvailableCurrencies: () => process.env.currency,
-  getCurrencyPairs: ({ currencyPairs }) => currencyPairs
+  getCurrencyPairs: state => state['currency-store'].currencyPairs
 }
 
 export const actions = {
@@ -40,13 +38,13 @@ export const actions = {
     })
     $nuxt._router.push(`/budget/${id}`)
   },
-  addTransaction({ state: { transactions, budgets, currencyPairs }, commit, dispatch }, {budgetId, target, sum, currency}) {
+  addTransaction({ state: { transactions, budgets}, getters: { getCurrencyPairs }, commit, dispatch }, {budgetId, target, sum, currency}) {
     let id;
     do {
       id = uid(10)
     } while (transactions[budgetId] && id in transactions[budgetId])
     const budgetById = budgets[budgetId];
-    const currencyRate = new D(currencyPairs[budgetById.currency] && currencyPairs[budgetById.currency][currency] || 1);
+    const currencyRate = new D(getCurrencyPairs[budgetById.currency] && getCurrencyPairs[budgetById.currency][currency] || 1);
     const sumInBudgetCurrency = new D(sum.div(currencyRate).toFixed(2));
     let newTransactionSums = [...budgetById.transactionSums]
     newTransactionSums.push(sumInBudgetCurrency)
@@ -96,20 +94,6 @@ export const actions = {
     })
     commit(types.DELETE_TRANSACTION, {budgetId, transactionId})
   },
-  async generateCurrencyPairs({state, getters, commit, dispatch}) {
-    await getters.getAvailableCurrencies.forEach(async base => {
-      try {
-        const response = await http.get('/latest', {params: {base}} );
-        const rates = response.data && response.data.rates
-        commit(types.SET_CURRENCY_PAIRS, {base, rates})
-      } catch (err) {
-        commit(types.SHOW_ERROR, err)
-      }
-    });
-    setTimeout(() => {
-      dispatch('generateCurrencyPairs')
-    }, 108000);
-  },
   deriveDataFromStorage({commit}) {
     const reviver = (key, value) => {
       if (!isNaN(+value) && value.toFixed)
@@ -146,11 +130,6 @@ export const mutations = {
       ...payload
     })
     localStorage.setItem('budgets', JSON.stringify(budgets))
-  },
-  [types.SET_CURRENCY_PAIRS](state, {base, rates} ) {
-    Vue.set(state.currencyPairs, base, {
-      ...rates
-    })
   },
   [types.ADD_TRANSACTION]({transactions}, payload) {
     if (!transactions[payload.budgetId]) transactions[payload.budgetId] = {}
