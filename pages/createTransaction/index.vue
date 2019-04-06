@@ -117,7 +117,7 @@ export default {
         new D(new D(this.sum).div(currencyRate).toFixed(2)).gt(budgetRemain)
       ) {
         // one side effect below can be avoided in perspective
-        this.availableBudget = budgetRemain.times(currencyRate)
+        this.availableBudget = new D(budgetRemain).times(currencyRate)
         return false
       } else {
         this.availableBudget = new D(0)
